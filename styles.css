@@ -159,6 +159,17 @@ body {
   margin-top: 0.7rem;
 }
 
+.task-form-grid {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+  grid-template-columns: 1.2fr 1fr 1fr 0.9fr auto;
+}
+
+.is-hidden {
+  display: none;
+}
+
 .filters-row {
   grid-template-columns: 1fr 1.4fr auto;
 }
@@ -307,6 +318,99 @@ select:focus {
   display: grid;
   gap: 0.8rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.tasks-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(290px, 0.85fr);
+  gap: 0.9rem;
+}
+
+.calendar-panel {
+  border: 1px solid #e5e8fb;
+  border-radius: 16px;
+  background: #fcfcff;
+  padding: 0.72rem;
+  height: fit-content;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.45rem;
+  align-items: center;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #454d77;
+}
+
+.calendar-actions {
+  margin: 0.55rem 0 0.7rem;
+  display: flex;
+  justify-content: center;
+}
+
+.task-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.74rem;
+  color: var(--muted);
+  font-weight: 700;
+  padding-bottom: 0.12rem;
+}
+
+.calendar-day {
+  min-height: 3rem;
+  border: 1px solid #e5e8fb;
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.calendar-day.is-empty {
+  background: transparent;
+  border-style: dashed;
+  border-color: #edf0fc;
+}
+
+.calendar-day.is-today {
+  border-color: #b9c1ff;
+  background: #f2f4ff;
+}
+
+.calendar-day.has-task {
+  box-shadow: 0 4px 12px rgba(90, 85, 234, 0.12);
+}
+
+.calendar-day-number {
+  font-size: 0.76rem;
+  color: #525a86;
+  font-weight: 700;
+}
+
+.calendar-dots {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+
+.calendar-dot {
+  width: 0.36rem;
+  height: 0.36rem;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 37, 68, 0.16);
 }
 
 .column {
@@ -541,6 +645,14 @@ select:focus {
   .filters-row {
     grid-template-columns: 1fr;
   }
+
+  .task-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tasks-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 840px) {
@@ -556,6 +668,7 @@ select:focus {
 
   .inline-form,
   .inline-form-small,
+  .task-form-grid,
   .filters-row {
     grid-template-columns: 1fr;
   }

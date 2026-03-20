@@ -2,6 +2,7 @@ const STORAGE_KEYS = {
   items: "aps-home-items-v2",
   tasks: "aps-home-maintenance-v1",
   categories: "aps-home-categories-v1",
+  taskCategories: "aps-home-task-categories-v1",
   syncSettings: "aps-home-sync-settings-v1",
   activeView: "aps-home-active-view-v1",
 };
@@ -15,6 +16,7 @@ const DEFAULT_SYNC_SETTINGS = {
 };
 
 const DEFAULT_CATEGORY_ID = "cat-inne";
+const DEFAULT_TASK_CATEGORY_ID = "task-cat-inne";
 const AVAILABLE_VIEWS = ["shopping", "tasks", "settings"];
 const CATEGORY_COLOR_PALETTE = [
   "#6C63FF",
@@ -38,6 +40,13 @@ const defaultCategories = [
   { id: DEFAULT_CATEGORY_ID, name: "Inne", color: "#F6A623" },
 ];
 
+const defaultTaskCategories = [
+  { id: "task-cat-sprzatanie", name: "Sprzątanie", color: "#7E57C2" },
+  { id: "task-cat-kuchnia", name: "Kuchnia", color: "#42A5F5" },
+  { id: "task-cat-lazienka", name: "Łazienka", color: "#37C48E" },
+  { id: DEFAULT_TASK_CATEGORY_ID, name: "Inne", color: "#F6A623" },
+];
+
 const nowIso = () => new Date().toISOString();
 
 const defaultItems = [
@@ -52,28 +61,38 @@ const defaultTasks = [
   {
     id: crypto.randomUUID(),
     name: "Umyj prysznic",
+    categoryId: "task-cat-lazienka",
+    scheduleType: "interval",
     intervalDays: 7,
     lastDoneAt: nowIso(),
     nextDueAt: addDays(new Date(), 7).toISOString(),
+    specificDate: null,
   },
   {
     id: crypto.randomUUID(),
     name: "Umyj lodówkę",
+    categoryId: "task-cat-kuchnia",
+    scheduleType: "interval",
     intervalDays: 30,
     lastDoneAt: nowIso(),
     nextDueAt: addDays(new Date(), 30).toISOString(),
+    specificDate: null,
   },
   {
     id: crypto.randomUUID(),
     name: "Umyj okna",
+    categoryId: "task-cat-sprzatanie",
+    scheduleType: "interval",
     intervalDays: 45,
     lastDoneAt: nowIso(),
     nextDueAt: addDays(new Date(), 45).toISOString(),
+    specificDate: null,
   },
 ];
 
 let state = {
   categories: normalizeCategories(loadArrayData(STORAGE_KEYS.categories, defaultCategories)),
+  taskCategories: normalizeTaskCategories(loadArrayData(STORAGE_KEYS.taskCategories, defaultTaskCategories)),
   items: normalizeItems(loadArrayData(STORAGE_KEYS.items, defaultItems)),
   tasks: normalizeTasks(loadArrayData(STORAGE_KEYS.tasks, defaultTasks)),
 };
@@ -85,6 +104,7 @@ let activeView = loadActiveView();
 let editingItemId = null;
 let editingTaskId = null;
 let draggedItemId = null;
+let calendarMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const filters = {
   categoryId: "all",
@@ -100,9 +120,16 @@ const itemSearchInput = document.getElementById("item-search");
 const clearFiltersButton = document.getElementById("clear-filters");
 const exportNotesButton = document.getElementById("export-notes");
 const exportStatus = document.getElementById("export-status");
+const taskCategorySelect = document.getElementById("task-category");
+const taskScheduleTypeSelect = document.getElementById("task-schedule-type");
+const taskIntervalInput = document.getElementById("task-interval");
+const taskDateInput = document.getElementById("task-date");
 const categoryForm = document.getElementById("category-form");
 const categoryNameInput = document.getElementById("category-name");
 const categoryList = document.getElementById("category-list");
+const taskCategoryForm = document.getElementById("task-category-form");
+const taskCategoryNameInput = document.getElementById("task-category-name");
+const taskCategoryList = document.getElementById("task-category-list");
 const syncForm = document.getElementById("sync-form");
 const syncOwnerInput = document.getElementById("sync-owner");
 const syncRepoInput = document.getElementById("sync-repo");
@@ -112,12 +139,19 @@ const syncTokenInput = document.getElementById("sync-token");
 const syncDownloadButton = document.getElementById("sync-download");
 const syncUploadButton = document.getElementById("sync-upload");
 const syncStatus = document.getElementById("sync-status");
+const calendarPrevButton = document.getElementById("calendar-prev");
+const calendarNextButton = document.getElementById("calendar-next");
+const calendarTodayButton = document.getElementById("calendar-today");
+const calendarMonthLabel = document.getElementById("calendar-month-label");
+const taskCalendarGrid = document.getElementById("task-calendar-grid");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
 document.getElementById("item-form").addEventListener("submit", handleAddItem);
 document.getElementById("task-form").addEventListener("submit", handleAddTask);
 categoryForm.addEventListener("submit", handleAddCategory);
+taskCategoryForm.addEventListener("submit", handleAddTaskCategory);
+taskScheduleTypeSelect.addEventListener("change", handleTaskScheduleTypeChange);
 categoryFilterSelect.addEventListener("change", (event) => {
   filters.categoryId = event.target.value;
   renderShopping();
@@ -128,6 +162,19 @@ itemSearchInput.addEventListener("input", (event) => {
 });
 clearFiltersButton.addEventListener("click", clearShoppingFilters);
 exportNotesButton.addEventListener("click", exportShoppingListToNotes);
+calendarPrevButton.addEventListener("click", () => {
+  calendarMonthStart = new Date(calendarMonthStart.getFullYear(), calendarMonthStart.getMonth() - 1, 1);
+  renderTaskCalendar();
+});
+calendarNextButton.addEventListener("click", () => {
+  calendarMonthStart = new Date(calendarMonthStart.getFullYear(), calendarMonthStart.getMonth() + 1, 1);
+  renderTaskCalendar();
+});
+calendarTodayButton.addEventListener("click", () => {
+  const now = new Date();
+  calendarMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  renderTaskCalendar();
+});
 syncForm.addEventListener("submit", handleSaveSyncSettings);
 syncDownloadButton.addEventListener("click", downloadFromGitHub);
 syncUploadButton.addEventListener("click", uploadToGitHub);
@@ -208,6 +255,45 @@ function normalizeCategories(categories) {
 
   if (!cleaned.some((category) => category.id === DEFAULT_CATEGORY_ID)) {
     cleaned.push({ id: DEFAULT_CATEGORY_ID, name: "Inne" });
+  }
+
+  const uniqueById = new Map();
+  cleaned.forEach((category) => {
+    if (!uniqueById.has(category.id)) {
+      uniqueById.set(category.id, category);
+    }
+  });
+
+  const withUniqueColors = [];
+  const usedColors = new Set();
+
+  [...uniqueById.values()].forEach((category) => {
+    const preferredColor = category.color;
+    const color = preferredColor && !usedColors.has(preferredColor)
+      ? preferredColor
+      : pickNextCategoryColor(usedColors);
+    usedColors.add(color);
+    withUniqueColors.push({
+      ...category,
+      color,
+    });
+  });
+
+  return withUniqueColors;
+}
+
+function normalizeTaskCategories(categories) {
+  const cleaned = categories
+    .filter((category) => category && typeof category.name === "string")
+    .map((category) => ({
+      id: category.id || `task-cat-${crypto.randomUUID()}`,
+      name: category.name.trim(),
+      color: normalizeColor(category.color),
+    }))
+    .filter((category) => category.name.length > 0);
+
+  if (!cleaned.some((category) => category.id === DEFAULT_TASK_CATEGORY_ID)) {
+    cleaned.push({ id: DEFAULT_TASK_CATEGORY_ID, name: "Inne" });
   }
 
   const uniqueById = new Map();
@@ -316,30 +402,61 @@ function normalizeTasks(tasks) {
   return tasks
     .filter((task) => task && typeof task.name === "string")
     .map((task) => {
+      const scheduleType = task.scheduleType === "date" ? "date" : "interval";
       const interval = Number(task.intervalDays);
       const safeInterval = Number.isFinite(interval) && interval > 0 ? interval : 7;
       const lastDoneAt = task.lastDoneAt || nowIso();
+      const specificDate = typeof task.specificDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(task.specificDate)
+        ? task.specificDate
+        : null;
+
+      if (scheduleType === "date") {
+        const dueDate = specificDate || formatDateKeyLocal(new Date(task.nextDueAt || nowIso()));
+        return {
+          id: task.id || crypto.randomUUID(),
+          name: task.name.trim(),
+          categoryId: task.categoryId || DEFAULT_TASK_CATEGORY_ID,
+          scheduleType,
+          intervalDays: null,
+          lastDoneAt,
+          nextDueAt: new Date(`${dueDate}T12:00:00`).toISOString(),
+          specificDate: dueDate,
+        };
+      }
+
       return {
         id: task.id || crypto.randomUUID(),
         name: task.name.trim(),
+        categoryId: task.categoryId || DEFAULT_TASK_CATEGORY_ID,
+        scheduleType,
         intervalDays: safeInterval,
         lastDoneAt,
         nextDueAt: task.nextDueAt || addDays(new Date(lastDoneAt), safeInterval).toISOString(),
+        specificDate: null,
       };
     })
     .filter((task) => task.name.length > 0);
 }
 
 function ensureCategoryConsistency(currentState) {
-  const categoryIds = new Set(currentState.categories.map((category) => category.id));
+  const itemCategoryIds = new Set(currentState.categories.map((category) => category.id));
+  const taskCategoryIds = new Set(currentState.taskCategories.map((category) => category.id));
   return {
     ...currentState,
     items: currentState.items.map((item) =>
-      categoryIds.has(item.categoryId)
+      itemCategoryIds.has(item.categoryId)
         ? item
         : {
             ...item,
             categoryId: DEFAULT_CATEGORY_ID,
+          }
+    ),
+    tasks: currentState.tasks.map((task) =>
+      taskCategoryIds.has(task.categoryId)
+        ? task
+        : {
+            ...task,
+            categoryId: DEFAULT_TASK_CATEGORY_ID,
           }
     ),
   };
@@ -349,6 +466,7 @@ function saveData() {
   localStorage.setItem(STORAGE_KEYS.items, JSON.stringify(state.items));
   localStorage.setItem(STORAGE_KEYS.tasks, JSON.stringify(state.tasks));
   localStorage.setItem(STORAGE_KEYS.categories, JSON.stringify(state.categories));
+  localStorage.setItem(STORAGE_KEYS.taskCategories, JSON.stringify(state.taskCategories));
 }
 
 function saveSyncSettings() {
@@ -369,9 +487,12 @@ function persistAndRender() {
 
 function renderAll() {
   renderCategoryControls();
+  renderTaskCategoryControls();
   renderShopping();
   renderMaintenance();
+  renderTaskCalendar();
   renderActiveView();
+  handleTaskScheduleTypeChange();
 }
 
 function renderActiveView() {
@@ -447,6 +568,56 @@ function renderCategoryList() {
   });
 }
 
+function renderTaskCategoryControls() {
+  const previousTaskCategory = taskCategorySelect.value;
+  taskCategorySelect.innerHTML = "";
+
+  const orderedCategories = [...state.taskCategories].sort((first, second) => first.name.localeCompare(second.name, "pl"));
+  orderedCategories.forEach((category) => {
+    taskCategorySelect.appendChild(optionNode(category.id, category.name));
+  });
+
+  taskCategorySelect.value =
+    previousTaskCategory && state.taskCategories.some((category) => category.id === previousTaskCategory)
+      ? previousTaskCategory
+      : DEFAULT_TASK_CATEGORY_ID;
+
+  renderTaskCategoryList();
+}
+
+function renderTaskCategoryList() {
+  taskCategoryList.innerHTML = "";
+  const categoriesOrdered = [...state.taskCategories].sort((first, second) => first.name.localeCompare(second.name, "pl"));
+
+  categoriesOrdered.forEach((category) => {
+    const usageCount = state.tasks.filter((task) => task.categoryId === category.id).length;
+
+    const chip = document.createElement("div");
+    chip.className = "chip";
+
+    const label = document.createElement("span");
+    label.textContent = `${category.name} (${usageCount})`;
+    label.className = "chip-label";
+
+    const colorDot = document.createElement("span");
+    colorDot.className = "chip-color-dot";
+    colorDot.style.backgroundColor = category.color;
+    chip.appendChild(colorDot);
+    chip.appendChild(label);
+
+    if (category.id !== DEFAULT_TASK_CATEGORY_ID) {
+      const removeButton = button("Usuń", "btn btn-danger", () => removeTaskCategory(category.id));
+      if (usageCount > 0) {
+        removeButton.disabled = true;
+        removeButton.title = "Najpierw zmień kategorię czynności przypisanych do tej kategorii.";
+      }
+      chip.appendChild(removeButton);
+    }
+
+    taskCategoryList.appendChild(chip);
+  });
+}
+
 function optionNode(value, text) {
   const option = document.createElement("option");
   option.value = value;
@@ -475,6 +646,46 @@ function handleAddCategory(event) {
   });
   categoryNameInput.value = "";
   persistAndRender();
+}
+
+function handleAddTaskCategory(event) {
+  event.preventDefault();
+  const name = taskCategoryNameInput.value.trim();
+  if (!name) {
+    return;
+  }
+
+  const alreadyExists = state.taskCategories.some((category) => category.name.toLowerCase() === name.toLowerCase());
+  if (alreadyExists) {
+    taskCategoryNameInput.focus();
+    return;
+  }
+
+  const usedColors = new Set(state.taskCategories.map((category) => category.color));
+  state.taskCategories.push({
+    id: `task-cat-${crypto.randomUUID()}`,
+    name,
+    color: pickNextCategoryColor(usedColors),
+  });
+  taskCategoryNameInput.value = "";
+  persistAndRender();
+}
+
+function removeTaskCategory(categoryId) {
+  if (categoryId === DEFAULT_TASK_CATEGORY_ID || state.tasks.some((task) => task.categoryId === categoryId)) {
+    return;
+  }
+
+  state.taskCategories = state.taskCategories.filter((category) => category.id !== categoryId);
+  persistAndRender();
+}
+
+function handleTaskScheduleTypeChange() {
+  const isDateMode = taskScheduleTypeSelect.value === "date";
+  taskIntervalInput.classList.toggle("is-hidden", isDateMode);
+  taskDateInput.classList.toggle("is-hidden", !isDateMode);
+  taskIntervalInput.required = !isDateMode;
+  taskDateInput.required = isDateMode;
 }
 
 function clearShoppingFilters() {
@@ -606,25 +817,53 @@ function handleAddItem(event) {
 function handleAddTask(event) {
   event.preventDefault();
   const nameInput = document.getElementById("task-name");
-  const intervalInput = document.getElementById("task-interval");
   const name = nameInput.value.trim();
-  const intervalDays = Number(intervalInput.value);
+  const categoryId = taskCategorySelect.value;
+  const scheduleType = taskScheduleTypeSelect.value === "date" ? "date" : "interval";
 
-  if (!name || !Number.isFinite(intervalDays) || intervalDays <= 0) {
+  if (!name || !categoryId) {
     return;
   }
 
   const now = new Date();
-  state.tasks.push({
-    id: crypto.randomUUID(),
-    name,
-    intervalDays,
-    lastDoneAt: now.toISOString(),
-    nextDueAt: addDays(now, intervalDays).toISOString(),
-  });
+
+  if (scheduleType === "date") {
+    const specificDate = taskDateInput.value;
+    if (!specificDate) {
+      return;
+    }
+
+    state.tasks.push({
+      id: crypto.randomUUID(),
+      name,
+      categoryId,
+      scheduleType,
+      intervalDays: null,
+      lastDoneAt: now.toISOString(),
+      nextDueAt: new Date(`${specificDate}T12:00:00`).toISOString(),
+      specificDate,
+    });
+    taskDateInput.value = "";
+  } else {
+    const intervalDays = Number(taskIntervalInput.value);
+    if (!Number.isFinite(intervalDays) || intervalDays <= 0) {
+      return;
+    }
+
+    state.tasks.push({
+      id: crypto.randomUUID(),
+      name,
+      categoryId,
+      scheduleType,
+      intervalDays,
+      lastDoneAt: now.toISOString(),
+      nextDueAt: addDays(now, intervalDays).toISOString(),
+      specificDate: null,
+    });
+    taskIntervalInput.value = "";
+  }
 
   nameInput.value = "";
-  intervalInput.value = "";
   persistAndRender();
 }
 
@@ -976,13 +1215,15 @@ function renderMaintenance() {
   }
 
   [...state.tasks]
-    .sort((first, second) => new Date(first.nextDueAt) - new Date(second.nextDueAt))
+    .sort((first, second) => new Date(first.nextDueAt || nowIso()) - new Date(second.nextDueAt || nowIso()))
     .forEach((task) => maintenanceList.appendChild(taskCard(task)));
 }
 
 function taskCard(task) {
   const card = document.createElement("article");
   card.className = "card";
+  const categoryColor = getTaskCategoryColor(task.categoryId);
+  applyCategoryCardColor(card, categoryColor);
 
   if (editingTaskId === task.id) {
     card.appendChild(taskEditForm(task));
@@ -995,10 +1236,13 @@ function taskCard(task) {
 
   const dueDate = new Date(task.nextDueAt);
   const dueDays = daysUntil(dueDate);
+  const scheduleLabel = task.scheduleType === "date"
+    ? `Konkretny dzień: ${formatDate(dueDate)}`
+    : `Co ${task.intervalDays} dni • Termin: ${formatDate(dueDate)}`;
 
   const meta = document.createElement("div");
   meta.className = "meta";
-  meta.textContent = `Co ${task.intervalDays} dni • Termin: ${formatDate(dueDate)}`;
+  meta.textContent = `Kategoria: ${getTaskCategoryName(task.categoryId)} • ${scheduleLabel}`;
 
   const badge = document.createElement("span");
   badge.className = `badge ${getDueBadgeClass(dueDays)}`;
@@ -1017,15 +1261,26 @@ function taskCard(task) {
 function completeTask(taskId) {
   editingTaskId = null;
   const now = new Date();
-  state.tasks = state.tasks.map((task) =>
-    task.id === taskId
-      ? {
-          ...task,
-          lastDoneAt: now.toISOString(),
-          nextDueAt: addDays(now, task.intervalDays).toISOString(),
-        }
-      : task
-  );
+
+  const task = state.tasks.find((currentTask) => currentTask.id === taskId);
+  if (!task) {
+    return;
+  }
+
+  if (task.scheduleType === "date") {
+    state.tasks = state.tasks.filter((currentTask) => currentTask.id !== taskId);
+  } else {
+    state.tasks = state.tasks.map((currentTask) =>
+      currentTask.id === taskId
+        ? {
+            ...currentTask,
+            lastDoneAt: now.toISOString(),
+            nextDueAt: addDays(now, currentTask.intervalDays).toISOString(),
+          }
+        : currentTask
+    );
+  }
+
   persistAndRender();
 }
 
@@ -1057,9 +1312,39 @@ function taskEditForm(task) {
 
   const intervalInput = document.createElement("input");
   intervalInput.type = "number";
-  intervalInput.required = true;
+  intervalInput.required = task.scheduleType !== "date";
   intervalInput.min = "1";
-  intervalInput.value = String(task.intervalDays);
+  intervalInput.value = String(task.intervalDays || "");
+
+  const categorySelect = document.createElement("select");
+  categorySelect.required = true;
+  [...state.taskCategories]
+    .sort((first, second) => first.name.localeCompare(second.name, "pl"))
+    .forEach((category) => {
+      categorySelect.appendChild(optionNode(category.id, category.name));
+    });
+  categorySelect.value = task.categoryId;
+
+  const scheduleTypeSelect = document.createElement("select");
+  scheduleTypeSelect.required = true;
+  scheduleTypeSelect.appendChild(optionNode("interval", "Iteracja (co X dni)"));
+  scheduleTypeSelect.appendChild(optionNode("date", "Konkretny dzień"));
+  scheduleTypeSelect.value = task.scheduleType;
+
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.value = task.specificDate || "";
+  dateInput.required = task.scheduleType === "date";
+  intervalInput.classList.toggle("is-hidden", task.scheduleType === "date");
+  dateInput.classList.toggle("is-hidden", task.scheduleType !== "date");
+
+  scheduleTypeSelect.addEventListener("change", () => {
+    const isDateMode = scheduleTypeSelect.value === "date";
+    intervalInput.classList.toggle("is-hidden", isDateMode);
+    dateInput.classList.toggle("is-hidden", !isDateMode);
+    intervalInput.required = !isDateMode;
+    dateInput.required = isDateMode;
+  });
 
   const actions = document.createElement("div");
   actions.className = "actions";
@@ -1070,8 +1355,12 @@ function taskEditForm(task) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const updatedName = nameInput.value.trim();
+    const updatedCategory = categorySelect.value;
+    const updatedScheduleType = scheduleTypeSelect.value === "date" ? "date" : "interval";
     const updatedInterval = Number(intervalInput.value);
-    if (!updatedName || !Number.isFinite(updatedInterval) || updatedInterval <= 0) {
+    const updatedDate = dateInput.value;
+
+    if (!updatedName || !updatedCategory) {
       return;
     }
 
@@ -1079,11 +1368,34 @@ function taskEditForm(task) {
       if (current.id !== task.id) {
         return current;
       }
+
+      if (updatedScheduleType === "date") {
+        if (!updatedDate) {
+          return current;
+        }
+        return {
+          ...current,
+          name: updatedName,
+          categoryId: updatedCategory,
+          scheduleType: updatedScheduleType,
+          intervalDays: null,
+          specificDate: updatedDate,
+          nextDueAt: new Date(`${updatedDate}T12:00:00`).toISOString(),
+        };
+      }
+
+      if (!Number.isFinite(updatedInterval) || updatedInterval <= 0) {
+        return current;
+      }
+
       const referenceDate = current.lastDoneAt ? new Date(current.lastDoneAt) : new Date();
       return {
         ...current,
         name: updatedName,
+        categoryId: updatedCategory,
+        scheduleType: updatedScheduleType,
         intervalDays: updatedInterval,
+        specificDate: null,
         nextDueAt: addDays(referenceDate, updatedInterval).toISOString(),
       };
     });
@@ -1092,8 +1404,16 @@ function taskEditForm(task) {
     persistAndRender();
   });
 
-  form.append(nameInput, intervalInput, actions);
+  form.append(nameInput, categorySelect, scheduleTypeSelect, intervalInput, dateInput, actions);
   return form;
+}
+
+function getTaskCategoryName(categoryId) {
+  return state.taskCategories.find((category) => category.id === categoryId)?.name || "Inne";
+}
+
+function getTaskCategoryColor(categoryId) {
+  return state.taskCategories.find((category) => category.id === categoryId)?.color || "#7E57C2";
 }
 
 function emptyState(text) {
@@ -1137,6 +1457,100 @@ function formatDate(date) {
     month: "short",
     day: "numeric",
   }).format(date);
+}
+
+function formatDateKeyLocal(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function getTaskDueDateKey(task) {
+  if (task.scheduleType === "date" && task.specificDate) {
+    return task.specificDate;
+  }
+
+  if (!task.nextDueAt) {
+    return null;
+  }
+
+  return formatDateKeyLocal(new Date(task.nextDueAt));
+}
+
+function renderTaskCalendar() {
+  const monthLabel = new Intl.DateTimeFormat("pl-PL", {
+    month: "long",
+    year: "numeric",
+  }).format(calendarMonthStart);
+  calendarMonthLabel.textContent = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1);
+
+  const taskDays = new Map();
+  state.tasks.forEach((task) => {
+    const dateKey = getTaskDueDateKey(task);
+    if (!dateKey) {
+      return;
+    }
+
+    if (!taskDays.has(dateKey)) {
+      taskDays.set(dateKey, new Set());
+    }
+    taskDays.get(dateKey).add(getTaskCategoryColor(task.categoryId));
+  });
+
+  const year = calendarMonthStart.getFullYear();
+  const month = calendarMonthStart.getMonth();
+  const firstDayOfMonth = new Date(year, month, 1);
+  const firstWeekday = (firstDayOfMonth.getDay() + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  taskCalendarGrid.innerHTML = "";
+  const weekDayLabels = ["Pn", "Wt", "Śr", "Cz", "Pt", "Sb", "Nd"];
+  weekDayLabels.forEach((label) => {
+    const cell = document.createElement("div");
+    cell.className = "calendar-weekday";
+    cell.textContent = label;
+    taskCalendarGrid.appendChild(cell);
+  });
+
+  for (let index = 0; index < firstWeekday; index += 1) {
+    const emptyCell = document.createElement("div");
+    emptyCell.className = "calendar-day is-empty";
+    taskCalendarGrid.appendChild(emptyCell);
+  }
+
+  const todayKey = formatDateKeyLocal(new Date());
+  for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber += 1) {
+    const dateObject = new Date(year, month, dayNumber);
+    const dateKey = formatDateKeyLocal(dateObject);
+
+    const dayCell = document.createElement("div");
+    dayCell.className = "calendar-day";
+    if (dateKey === todayKey) {
+      dayCell.classList.add("is-today");
+    }
+
+    const dayLabel = document.createElement("span");
+    dayLabel.className = "calendar-day-number";
+    dayLabel.textContent = String(dayNumber);
+    dayCell.appendChild(dayLabel);
+
+    const colors = [...(taskDays.get(dateKey) || [])];
+    if (colors.length) {
+      dayCell.classList.add("has-task");
+      const dots = document.createElement("div");
+      dots.className = "calendar-dots";
+      colors.slice(0, 3).forEach((color) => {
+        const dot = document.createElement("span");
+        dot.className = "calendar-dot";
+        dot.style.backgroundColor = color;
+        dots.appendChild(dot);
+      });
+      dayCell.appendChild(dots);
+    }
+
+    taskCalendarGrid.appendChild(dayCell);
+  }
 }
 
 function setSyncFormValues(settings) {
@@ -1231,6 +1645,7 @@ function exportSyncPayload() {
     updatedAt: nowIso(),
     state: {
       categories: state.categories,
+      taskCategories: state.taskCategories,
       items: state.items,
       tasks: state.tasks,
     },
@@ -1250,6 +1665,9 @@ function applySyncPayload(payload) {
   const nextCategories = Array.isArray(remoteState.categories)
     ? normalizeCategories(remoteState.categories)
     : normalizeCategories(defaultCategories);
+  const nextTaskCategories = Array.isArray(remoteState.taskCategories)
+    ? normalizeTaskCategories(remoteState.taskCategories)
+    : normalizeTaskCategories(defaultTaskCategories);
   const nextItems = Array.isArray(remoteState.items) ? normalizeItems(remoteState.items) : null;
   const nextTasks = Array.isArray(remoteState.tasks) ? normalizeTasks(remoteState.tasks) : null;
 
@@ -1259,6 +1677,7 @@ function applySyncPayload(payload) {
 
   state = ensureCategoryConsistency({
     categories: nextCategories,
+    taskCategories: nextTaskCategories,
     items: nextItems,
     tasks: nextTasks,
   });

@@ -77,13 +77,35 @@
                 <p>Priorytet zadań automatycznie zmienia się wg terminu wykonania.</p>
               </div>
 
-              <form id="task-form" class="inline-form">
-                <input id="task-name" type="text" placeholder="Dodaj zadanie (np. mycie lodówki)" required />
-                <input id="task-interval" type="number" min="1" placeholder="Częstotliwość (dni)" required />
-                <button type="submit">Dodaj zadanie</button>
-              </form>
+              <div class="tasks-layout">
+                <div>
+                  <form id="task-form" class="task-form-grid">
+                    <input id="task-name" type="text" placeholder="Dodaj zadanie (np. mycie lodówki)" required />
+                    <select id="task-category" required></select>
+                    <select id="task-schedule-type" required>
+                      <option value="interval">Iteracja (co X dni)</option>
+                      <option value="date">Konkretny dzień</option>
+                    </select>
+                    <input id="task-interval" type="number" min="1" placeholder="Częstotliwość (dni)" required />
+                    <input id="task-date" type="date" class="is-hidden" />
+                    <button type="submit">Dodaj zadanie</button>
+                  </form>
 
-              <div id="maintenance-list" class="card-list"></div>
+                  <div id="maintenance-list" class="card-list"></div>
+                </div>
+
+                <aside class="calendar-panel">
+                  <div class="calendar-header">
+                    <button id="calendar-prev" type="button" class="btn">←</button>
+                    <h3 id="calendar-month-label">Miesiąc</h3>
+                    <button id="calendar-next" type="button" class="btn">→</button>
+                  </div>
+                  <div class="calendar-actions">
+                    <button id="calendar-today" type="button" class="btn">Dzisiaj</button>
+                  </div>
+                  <div id="task-calendar-grid" class="task-calendar-grid"></div>
+                </aside>
+              </div>
             </section>
           </section>
 
@@ -102,6 +124,22 @@
                     <button type="submit">Dodaj kategorię</button>
                   </form>
                   <div id="category-list" class="chip-list"></div>
+                </details>
+              </section>
+
+              <section class="settings-card">
+                <div class="panel-header">
+                  <h2>Kategorie czynności</h2>
+                  <p>Dodawaj i porządkuj kategorie przypisywane do czynności domowych.</p>
+                </div>
+
+                <details class="submenu" id="task-category-menu" open>
+                  <summary>Zarządzanie kategoriami czynności</summary>
+                  <form id="task-category-form" class="inline-form inline-form-small">
+                    <input id="task-category-name" type="text" placeholder="Nowa kategoria czynności" required />
+                    <button type="submit">Dodaj kategorię</button>
+                  </form>
+                  <div id="task-category-list" class="chip-list"></div>
                 </details>
               </section>
 
