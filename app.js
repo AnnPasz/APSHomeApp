@@ -501,12 +501,12 @@ function buildShoppingExportText(groups) {
     timeStyle: "short",
   }).format(new Date());
 
-  const lines = [`Lista zakupów — APS Home`, `Wygenerowano: ${timestamp}`, ""];
+  const lines = [`Lista zakupów — APS Home`, `Wygenerowano: ${timestamp}`, "", "Checklist:", ""];
 
   groups.forEach((group) => {
     lines.push(`${group.categoryName}:`);
     group.items.forEach((item) => {
-      lines.push(`- ${item.name} (${shoppingStatusText(item)})`);
+      lines.push(`- [ ] ${item.name} (${shoppingStatusText(item)})`);
     });
     lines.push("");
   });
