@@ -38,6 +38,8 @@ body {
   top: 0;
   align-self: start;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   padding: 1.4rem 1rem;
   background: linear-gradient(180deg, #312f8d, #5c56ec 58%, #716bff);
   color: #fff;
@@ -62,6 +64,30 @@ body {
 .sidebar-nav {
   display: grid;
   gap: 0.5rem;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 0.75rem 0.45rem 0.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sidebar-update-text {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.sidebar-refresh-btn {
+  width: 100%;
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.sidebar-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .nav-link {

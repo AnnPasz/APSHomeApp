@@ -5,6 +5,7 @@ const STORAGE_KEYS = {
   taskCategories: "aps-home-task-categories-v1",
   syncSettings: "aps-home-sync-settings-v1",
   activeView: "aps-home-active-view-v1",
+  lastGithubDownloadAt: "aps-home-last-github-download-at-v1",
 };
 
 const DEFAULT_SYNC_SETTINGS = {
@@ -106,6 +107,7 @@ let editingTaskId = null;
 let draggedItemId = null;
 let calendarMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 let selectedCalendarDate = null;
+let lastGithubDownloadAt = loadLastGithubDownloadAt();
 
 const filters = {
   categoryId: "all",
@@ -146,6 +148,8 @@ const calendarTodayButton = document.getElementById("calendar-today");
 const calendarMonthLabel = document.getElementById("calendar-month-label");
 const taskCalendarGrid = document.getElementById("task-calendar-grid");
 const taskDateFilter = document.getElementById("task-date-filter");
+const sidebarLastUpdate = document.getElementById("sidebar-last-update");
+const sidebarRefreshButton = document.getElementById("sidebar-refresh");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
@@ -164,6 +168,7 @@ itemSearchInput.addEventListener("input", (event) => {
 });
 clearFiltersButton.addEventListener("click", clearShoppingFilters);
 exportNotesButton.addEventListener("click", exportShoppingListToNotes);
+sidebarRefreshButton.addEventListener("click", downloadFromGitHub);
 calendarPrevButton.addEventListener("click", () => {
   calendarMonthStart = new Date(calendarMonthStart.getFullYear(), calendarMonthStart.getMonth() - 1, 1);
   renderTaskCalendar();
@@ -225,6 +230,27 @@ function loadObjectData(key, fallback) {
   } catch {
     return { ...fallback };
   }
+}
+
+function loadLastGithubDownloadAt() {
+  const raw = localStorage.getItem(STORAGE_KEYS.lastGithubDownloadAt);
+  if (!raw) {
+    return null;
+  }
+
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime()) ? null : raw;
+}
+
+function saveLastGithubDownloadAt(value) {
+  if (!value) {
+    localStorage.removeItem(STORAGE_KEYS.lastGithubDownloadAt);
+    lastGithubDownloadAt = null;
+    return;
+  }
+
+  lastGithubDownloadAt = value;
+  localStorage.setItem(STORAGE_KEYS.lastGithubDownloadAt, value);
 }
 
 function loadActiveView() {
@@ -494,7 +520,21 @@ function renderAll() {
   renderMaintenance();
   renderTaskCalendar();
   renderActiveView();
+  renderSidebarUpdateInfo();
   handleTaskScheduleTypeChange();
+}
+
+function renderSidebarUpdateInfo() {
+  if (!lastGithubDownloadAt) {
+    sidebarLastUpdate.textContent = "Ostatnia aktualizacja: brak";
+    return;
+  }
+
+  const formatted = new Intl.DateTimeFormat("pl-PL", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date(lastGithubDownloadAt));
+  sidebarLastUpdate.textContent = `Ostatnia aktualizacja: ${formatted}`;
 }
 
 function renderActiveView() {
@@ -1648,6 +1688,7 @@ function setSyncStatus(message, type = "info") {
 function setSyncBusy(isBusy) {
   syncDownloadButton.disabled = isBusy;
   syncUploadButton.disabled = isBusy;
+  sidebarRefreshButton.disabled = isBusy;
   syncForm.querySelectorAll("input, button").forEach((node) => {
     if (node.id === "sync-download" || node.id === "sync-upload") {
       return;
@@ -1756,6 +1797,8 @@ async function downloadFromGitHub() {
 
     const decoded = fromBase64(payload.content.replace(/\n/g, ""));
     applySyncPayload(JSON.parse(decoded));
+    saveLastGithubDownloadAt(nowIso());
+    renderSidebarUpdateInfo();
     setSyncStatus("Pobrano dane i zaktualizowano stan lokalny.", "success");
   } catch (error) {
     setSyncStatus(error.message || "Pobieranie nie powiodło się.", "error");
