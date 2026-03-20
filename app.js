@@ -669,7 +669,7 @@ function itemCard(item, column) {
   if (column === "stock") {
     meta.textContent = `Kategoria: ${categoryName}`;
   } else {
-    const level = item.depletionLevel === "gone" ? "Brak" : "Kończy się";
+    const level = item.depletionLevel === "gone" ? "Status: Brak" : "Status: Kończy się";
     meta.textContent = `Kategoria: ${categoryName}`;
     shoppingStatusBadge = document.createElement("span");
     shoppingStatusBadge.className = `badge shopping-status ${item.depletionLevel === "gone" ? "shopping-status-gone" : "shopping-status-low"}`;
