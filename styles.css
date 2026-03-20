@@ -90,6 +90,30 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.sidebar-refresh-status {
+  font-size: 0.76rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 10px;
+  padding: 0.35rem 0.45rem;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sidebar-refresh-status.sidebar-refresh-info {
+  border-color: rgba(170, 201, 255, 0.55);
+  background: rgba(131, 170, 255, 0.17);
+}
+
+.sidebar-refresh-status.sidebar-refresh-success {
+  border-color: rgba(147, 235, 208, 0.6);
+  background: rgba(56, 197, 146, 0.2);
+}
+
+.sidebar-refresh-status.sidebar-refresh-error {
+  border-color: rgba(255, 176, 196, 0.65);
+  background: rgba(235, 90, 133, 0.24);
+}
+
 .nav-link {
   width: 100%;
   text-align: left;

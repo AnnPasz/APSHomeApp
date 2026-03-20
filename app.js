@@ -150,6 +150,7 @@ const taskCalendarGrid = document.getElementById("task-calendar-grid");
 const taskDateFilter = document.getElementById("task-date-filter");
 const sidebarLastUpdate = document.getElementById("sidebar-last-update");
 const sidebarRefreshButton = document.getElementById("sidebar-refresh");
+const sidebarRefreshStatus = document.getElementById("sidebar-refresh-status");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
@@ -527,6 +528,7 @@ function renderAll() {
 function renderSidebarUpdateInfo() {
   if (!lastGithubDownloadAt) {
     sidebarLastUpdate.textContent = "Ostatnia aktualizacja: brak";
+    setSidebarRefreshStatus("Status: gotowe", "info");
     return;
   }
 
@@ -535,6 +537,13 @@ function renderSidebarUpdateInfo() {
     timeStyle: "short",
   }).format(new Date(lastGithubDownloadAt));
   sidebarLastUpdate.textContent = `Ostatnia aktualizacja: ${formatted}`;
+  setSidebarRefreshStatus("Status: gotowe", "success");
+}
+
+function setSidebarRefreshStatus(message, type = "info") {
+  sidebarRefreshStatus.textContent = message;
+  sidebarRefreshStatus.classList.remove("sidebar-refresh-info", "sidebar-refresh-success", "sidebar-refresh-error");
+  sidebarRefreshStatus.classList.add(`sidebar-refresh-${type}`);
 }
 
 function renderActiveView() {
@@ -1775,6 +1784,7 @@ async function downloadFromGitHub() {
   try {
     setSyncBusy(true);
     setSyncStatus("Pobieranie danych z GitHub...", "info");
+    setSidebarRefreshStatus("Status: trwa aktualizacja…", "info");
     const settings = validateSyncSettings(false);
     const response = await fetch(buildContentsEndpoint(settings), {
       method: "GET",
@@ -1799,8 +1809,10 @@ async function downloadFromGitHub() {
     applySyncPayload(JSON.parse(decoded));
     saveLastGithubDownloadAt(nowIso());
     renderSidebarUpdateInfo();
+    setSidebarRefreshStatus("Status: sukces", "success");
     setSyncStatus("Pobrano dane i zaktualizowano stan lokalny.", "success");
   } catch (error) {
+    setSidebarRefreshStatus("Status: błąd aktualizacji", "error");
     setSyncStatus(error.message || "Pobieranie nie powiodło się.", "error");
   } finally {
     setSyncBusy(false);
