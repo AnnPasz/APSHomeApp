@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-03-20T13:12:41.764Z",
+  "updatedAt": "2026-03-20T13:14:13.302Z",
   "state": {
     "categories": [
       {
@@ -284,7 +284,7 @@
       },
       {
         "id": "be320517-cdc7-4aac-9404-cb1163a02e41",
-        "name": "żwirek",
+        "name": "Żwirek",
         "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
         "state": "shopping",
         "depletionLevel": "gone",
@@ -463,6 +463,16 @@
         "intervalDays": 30,
         "lastDoneAt": "2026-03-20T12:41:30.923Z",
         "nextDueAt": "2026-04-19T11:41:30.923Z",
+        "specificDate": null
+      },
+      {
+        "id": "8f8f5515-7273-447e-819a-fbbfb1926c3d",
+        "name": "Kominiarz",
+        "categoryId": "task-cat-05628709-e10d-47a1-bdbc-d3708b7e7779",
+        "scheduleType": "interval",
+        "intervalDays": 182,
+        "lastDoneAt": "2026-03-20T13:14:04.518Z",
+        "nextDueAt": "2026-09-18T12:14:04.518Z",
         "specificDate": null
       }
     ]
