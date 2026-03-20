@@ -52,12 +52,15 @@ body {
 
 .sidebar-logo-wrap {
   padding: 0.2rem 0.45rem 0.7rem;
+  display: flex;
+  justify-content: center;
 }
 
 .sidebar-logo {
   display: block;
   width: 100%;
   max-width: 170px;
+  margin: 0 auto;
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
