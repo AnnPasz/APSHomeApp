@@ -3,6 +3,7 @@ const STORAGE_KEYS = {
   tasks: "aps-home-maintenance-v1",
   categories: "aps-home-categories-v1",
   syncSettings: "aps-home-sync-settings-v1",
+  activeView: "aps-home-active-view-v1",
 };
 
 const DEFAULT_SYNC_SETTINGS = {
@@ -69,6 +70,7 @@ let syncSettings = loadObjectData(STORAGE_KEYS.syncSettings, DEFAULT_SYNC_SETTIN
 let editingItemId = null;
 let editingTaskId = null;
 let draggedItemId = null;
+let activeView = loadActiveView();
 
 const filters = {
   categoryId: "all",
@@ -93,6 +95,8 @@ const syncTokenInput = document.getElementById("sync-token");
 const syncDownloadButton = document.getElementById("sync-download");
 const syncUploadButton = document.getElementById("sync-upload");
 const syncStatus = document.getElementById("sync-status");
+const navLinks = [...document.querySelectorAll(".nav-link")];
+const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
 document.getElementById("item-form").addEventListener("submit", handleAddItem);
 document.getElementById("task-form").addEventListener("submit", handleAddTask);
@@ -108,9 +112,33 @@ itemSearchInput.addEventListener("input", (event) => {
 syncForm.addEventListener("submit", handleSaveSyncSettings);
 syncDownloadButton.addEventListener("click", downloadFromGitHub);
 syncUploadButton.addEventListener("click", uploadToGitHub);
+navLinks.forEach((link) => {
+  link.addEventListener("click", () => setActiveView(link.dataset.view));
+});
 
 setSyncFormValues(syncSettings);
 renderAll();
+
+function loadActiveView() {
+  const savedView = localStorage.getItem(STORAGE_KEYS.activeView);
+  if (["shopping", "tasks", "settings"].includes(savedView)) {
+    return savedView;
+  }
+  return "shopping";
+}
+
+function saveActiveView() {
+  localStorage.setItem(STORAGE_KEYS.activeView, activeView);
+}
+
+function setActiveView(viewName) {
+  if (!["shopping", "tasks", "settings"].includes(viewName)) {
+    return;
+  }
+  activeView = viewName;
+  saveActiveView();
+  renderActiveView();
+}
 
 function loadArrayData(key, fallback) {
   const raw = localStorage.getItem(key);
@@ -247,6 +275,17 @@ function renderAll() {
   renderCategoryControls();
   renderShopping();
   renderMaintenance();
+  renderActiveView();
+}
+
+function renderActiveView() {
+  navLinks.forEach((link) => {
+    link.classList.toggle("is-active", link.dataset.view === activeView);
+  });
+
+  viewPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.dataset.viewPanel === activeView);
+  });
 }
 
 function renderCategoryControls() {
