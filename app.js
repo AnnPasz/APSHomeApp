@@ -98,6 +98,8 @@ const itemCategorySelect = document.getElementById("item-category");
 const categoryFilterSelect = document.getElementById("category-filter");
 const itemSearchInput = document.getElementById("item-search");
 const clearFiltersButton = document.getElementById("clear-filters");
+const exportNotesButton = document.getElementById("export-notes");
+const exportStatus = document.getElementById("export-status");
 const categoryForm = document.getElementById("category-form");
 const categoryNameInput = document.getElementById("category-name");
 const categoryList = document.getElementById("category-list");
@@ -125,6 +127,7 @@ itemSearchInput.addEventListener("input", (event) => {
   renderShopping();
 });
 clearFiltersButton.addEventListener("click", clearShoppingFilters);
+exportNotesButton.addEventListener("click", exportShoppingListToNotes);
 syncForm.addEventListener("submit", handleSaveSyncSettings);
 syncDownloadButton.addEventListener("click", downloadFromGitHub);
 syncUploadButton.addEventListener("click", uploadToGitHub);
@@ -482,6 +485,91 @@ function clearShoppingFilters() {
   renderShopping();
 }
 
+function setExportStatus(message, type = "info") {
+  exportStatus.textContent = message;
+  exportStatus.classList.remove("export-info", "export-success", "export-error");
+  exportStatus.classList.add(`export-${type}`);
+}
+
+function shoppingStatusText(item) {
+  return item.depletionLevel === "gone" ? "Status: Brak" : "Status: Kończy się";
+}
+
+function buildShoppingExportText(groups) {
+  const timestamp = new Intl.DateTimeFormat("pl-PL", {
+    dateStyle: "short",
+    timeStyle: "short",
+  }).format(new Date());
+
+  const lines = [`Lista zakupów — APS Home`, `Wygenerowano: ${timestamp}`, ""];
+
+  groups.forEach((group) => {
+    lines.push(`${group.categoryName}:`);
+    group.items.forEach((item) => {
+      lines.push(`- ${item.name} (${shoppingStatusText(item)})`);
+    });
+    lines.push("");
+  });
+
+  return lines.join("\n").trim();
+}
+
+function downloadTextFile(content, fileName) {
+  const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = fileName;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function exportShoppingListToNotes() {
+  const shoppingItems = state.items.filter((item) => item.state === "shopping" && filterItem(item));
+
+  if (!shoppingItems.length) {
+    setExportStatus("Brak pozycji do eksportu (po uwzględnieniu filtrów).", "error");
+    return;
+  }
+
+  const groups = groupShoppingItemsByCategory(shoppingItems);
+  const exportText = buildShoppingExportText(groups);
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Lista zakupów APS Home",
+        text: exportText,
+      });
+      setExportStatus("Otworzono panel udostępniania iOS. Wybierz aplikację Notatki.", "success");
+      return;
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        setExportStatus("Nie udało się otworzyć panelu udostępniania. Używam fallbacku.", "info");
+      } else {
+        setExportStatus("Udostępnianie anulowane.", "info");
+        return;
+      }
+    }
+  }
+
+  if (navigator.clipboard?.writeText) {
+    try {
+      await navigator.clipboard.writeText(exportText);
+      setExportStatus("Skopiowano listę do schowka. Wklej ją do Notatek iOS.", "success");
+      return;
+    } catch {
+      setExportStatus("Nie udało się skopiować do schowka. Pobieram plik TXT.", "info");
+    }
+  }
+
+  const datePart = new Date().toISOString().slice(0, 10);
+  downloadTextFile(exportText, `lista-zakupow-${datePart}.txt`);
+  setExportStatus("Pobrano plik TXT z listą zakupów.", "success");
+}
+
 function removeCategory(categoryId) {
   if (categoryId === DEFAULT_CATEGORY_ID || state.items.some((item) => item.categoryId === categoryId)) {
     return;
@@ -669,7 +757,7 @@ function itemCard(item, column) {
   if (column === "stock") {
     meta.textContent = `Kategoria: ${categoryName}`;
   } else {
-    const level = item.depletionLevel === "gone" ? "Status: Brak" : "Status: Kończy się";
+    const level = shoppingStatusText(item);
     meta.textContent = `Kategoria: ${categoryName}`;
     shoppingStatusBadge = document.createElement("span");
     shoppingStatusBadge.className = `badge shopping-status ${item.depletionLevel === "gone" ? "shopping-status-gone" : "shopping-status-low"}`;

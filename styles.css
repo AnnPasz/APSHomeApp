@@ -163,6 +163,30 @@ body {
   grid-template-columns: 1fr 1.4fr auto;
 }
 
+.shopping-tools {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+}
+
+.export-status {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+.export-status.export-success {
+  color: #0f7d67;
+}
+
+.export-status.export-error {
+  color: #bf2f58;
+}
+
+.export-status.export-info {
+  color: #3a54d3;
+}
+
 .settings-grid {
   display: grid;
   gap: 1rem;
