@@ -55,7 +55,13 @@
                 <div class="column">
                   <h3>Lista zakupów</h3>
                   <div class="shopping-tools">
-                    <button id="export-notes" type="button" class="btn btn-success">Eksportuj do Notes (iOS)</button>
+                    <button id="export-notes" type="button" class="btn btn-success btn-export-notes">
+                      <span class="notes-icon" aria-hidden="true">
+                        <span class="notes-icon-top"></span>
+                        <span class="notes-icon-lines"></span>
+                      </span>
+                      <span>Eksportuj do Notes (iOS)</span>
+                    </button>
                     <div id="export-status" class="export-status">Eksport nie został uruchomiony.</div>
                   </div>
                   <div id="shopping-list" class="card-list"></div>
