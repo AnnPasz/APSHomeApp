@@ -1,37 +1,51 @@
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home Control Board</title>
+    <title>APS Home — Planer domu</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <header class="app-header">
-      <h1>Home Control Board</h1>
-      <p>Track consumables and preventive home maintenance in one place.</p>
+      <h1>APS Home</h1>
+      <p>Zakupy domowe i harmonogram zadań prewencyjnych w jednym miejscu.</p>
     </header>
 
     <main class="layout">
       <section class="panel">
         <div class="panel-header">
-          <h2>Shopping Kanban</h2>
-          <p>Mark items as low/gone and confirm when purchased.</p>
+          <h2>Zakupy (Kanban)</h2>
+          <p>Oznacz produkt jako „kończy się” lub „brak”, a trafi na listę zakupów.</p>
         </div>
 
         <form id="item-form" class="inline-form">
-          <input id="item-name" type="text" placeholder="Add consumable (e.g. pasta)" required />
-          <input id="item-note" type="text" placeholder="Optional note (e.g. 500g)" />
-          <button type="submit">Add Item</button>
+          <input id="item-name" type="text" placeholder="Dodaj produkt (np. makaron)" required />
+          <select id="item-category" required></select>
+          <button type="submit">Dodaj produkt</button>
         </form>
+
+        <div class="filters-row">
+          <select id="category-filter"></select>
+          <input id="item-search" type="search" placeholder="Szukaj produktu po nazwie..." />
+        </div>
+
+        <details class="submenu" id="category-menu">
+          <summary>Zarządzanie kategoriami</summary>
+          <form id="category-form" class="inline-form inline-form-small">
+            <input id="category-name" type="text" placeholder="Nowa kategoria" required />
+            <button type="submit">Dodaj kategorię</button>
+          </form>
+          <div id="category-list" class="chip-list"></div>
+        </details>
 
         <div class="kanban-grid">
           <div class="column">
-            <h3>At Home</h3>
+            <h3>W domu</h3>
             <div id="stock-list" class="card-list"></div>
           </div>
           <div class="column">
-            <h3>Shopping List</h3>
+            <h3>Lista zakupów</h3>
             <div id="shopping-list" class="card-list"></div>
           </div>
         </div>
@@ -39,14 +53,14 @@
 
       <section class="panel">
         <div class="panel-header">
-          <h2>Preventive Maintenance Queue</h2>
-          <p>Tasks reorder automatically by next due date.</p>
+          <h2>Kolejka prac domowych</h2>
+          <p>Priorytet zadań automatycznie zmienia się wg terminu wykonania.</p>
         </div>
 
         <form id="task-form" class="inline-form">
-          <input id="task-name" type="text" placeholder="Add maintenance task" required />
-          <input id="task-interval" type="number" min="1" placeholder="Interval (days)" required />
-          <button type="submit">Add Task</button>
+          <input id="task-name" type="text" placeholder="Dodaj zadanie (np. mycie lodówki)" required />
+          <input id="task-interval" type="number" min="1" placeholder="Częstotliwość (dni)" required />
+          <button type="submit">Dodaj zadanie</button>
         </form>
 
         <div id="maintenance-list" class="card-list"></div>
@@ -54,29 +68,29 @@
 
       <section class="panel">
         <div class="panel-header">
-          <h2>GitHub Sync</h2>
-          <p>Sync items and maintenance data between local and GitHub Pages versions.</p>
+          <h2>Synchronizacja GitHub</h2>
+          <p>Synchronizuj produkty i zadania między wersją lokalną i GitHub Pages.</p>
         </div>
 
         <form id="sync-form" class="sync-form" autocomplete="off">
-          <input id="sync-owner" type="text" placeholder="Owner (e.g. AnnPasz)" required />
-          <input id="sync-repo" type="text" placeholder="Repo (e.g. APSHomeApp)" required />
-          <input id="sync-branch" type="text" placeholder="Branch (e.g. main)" required />
-          <input id="sync-path" type="text" placeholder="Data path (e.g. data/state.json)" required />
-          <input id="sync-token" type="password" placeholder="GitHub token (required for upload)" />
+          <input id="sync-owner" type="text" placeholder="Właściciel (np. AnnPasz)" required />
+          <input id="sync-repo" type="text" placeholder="Repozytorium (np. APSHomeApp)" required />
+          <input id="sync-branch" type="text" placeholder="Gałąź (np. main)" required />
+          <input id="sync-path" type="text" placeholder="Ścieżka danych (np. data/state.json)" required />
+          <input id="sync-token" type="password" placeholder="Token GitHub (wymagany do wysyłki)" />
           <div class="actions">
-            <button id="sync-save-settings" type="submit" class="btn">Save Sync Settings</button>
-            <button id="sync-download" type="button" class="btn btn-success">Download from GitHub</button>
-            <button id="sync-upload" type="button" class="btn btn-warning">Upload to GitHub</button>
+            <button id="sync-save-settings" type="submit" class="btn">Zapisz ustawienia</button>
+            <button id="sync-download" type="button" class="btn btn-success">Pobierz z GitHub</button>
+            <button id="sync-upload" type="button" class="btn btn-warning">Wyślij na GitHub</button>
           </div>
         </form>
 
-        <div id="sync-status" class="sync-status">Sync not started.</div>
+        <div id="sync-status" class="sync-status">Synchronizacja nie została uruchomiona.</div>
       </section>
     </main>
 
     <template id="empty-state-template">
-      <div class="empty-state">Nothing here yet.</div>
+      <div class="empty-state">Brak danych.</div>
     </template>
 
     <script src="./app.js"></script>

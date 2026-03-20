@@ -1,3 +1,62 @@
+# APS Home
+
+Aplikacja webowa do zarządzania zakupami domowymi i cyklicznymi pracami prewencyjnymi.
+
+## Funkcje
+
+- Kanban zakupów:
+  - `W domu` i `Lista zakupów`.
+  - Oznaczanie: `Kończy się`, `Brak`, `Kupione`.
+  - Przeciąganie kart między kolumnami.
+- Kategorie produktów:
+  - Każdy produkt ma kategorię.
+  - Osobne submenu do dodawania/usuwania kategorii.
+- Filtrowanie listy produktów:
+  - Filtr po kategorii.
+  - Dynamiczne wyszukiwanie po nazwie (na żywo).
+- Zadania prewencyjne:
+  - Własna częstotliwość (dni) dla każdego zadania.
+  - Automatyczne sortowanie kolejki wg terminu.
+  - Oznaczanie zadania jako wykonane.
+- Synchronizacja GitHub:
+  - `Wyślij na GitHub` zapisuje stan do pliku JSON w repo.
+  - `Pobierz z GitHub` odtwarza stan na innym urządzeniu/przeglądarce.
+
+## Uruchomienie lokalne
+
+```bash
+cd /Users/aps/APSHomeApp
+python3 -m http.server 8000
+```
+
+Następnie otwórz: `http://localhost:8000`.
+
+## Synchronizacja lokalna + GitHub Pages
+
+W aplikacji użyj panelu **Synchronizacja GitHub**.
+
+Sugerowane ustawienia:
+
+- Właściciel: `AnnPasz`
+- Repozytorium: `APSHomeApp`
+- Gałąź: `main`
+- Ścieżka danych: `data/state.json`
+
+### Token GitHub
+
+Do wysyłki wymagany jest token z uprawnieniem `Contents: Read and write` dla repozytorium `APSHomeApp`.
+
+Token tworzysz w GitHub:
+
+`Settings` → `Developer settings` → `Personal access tokens` → `Fine-grained tokens` → `Generate new token`
+
+## GitHub Pages
+
+Po pushu na `main` uruchamia się workflow z `.github/workflows/deploy-pages.yml`.
+
+Docelowy adres:
+
+- `https://annpasz.github.io/APSHomeApp/`
 # APS Home App
 
 Simple web app for managing home consumables and preventive maintenance.
