@@ -188,7 +188,7 @@ body {
 .layout {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.2rem 2rem;
+  padding: 1.2rem 1.2rem 2rem;
 }
 
 .view-panel {
@@ -441,6 +441,35 @@ select:focus {
   padding: 0.12rem 0.36rem;
   font-weight: 700;
   color: #1d3fa8;
+}
+
+.mobile-link-box a {
+  color: #1d3fa8;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid #f1c2da;
+  border-radius: 8px;
+  background: #fff;
+  padding: 0.12rem 0.36rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+body.mobile-standalone .sidebar {
+  display: none;
+}
+
+body.mobile-standalone .app-shell {
+  grid-template-columns: 1fr;
+}
+
+body.mobile-standalone .layout {
+  max-width: 560px;
+  padding: 1rem;
+}
+
+body.mobile-standalone .mobile-panel {
+  max-width: 100%;
 }
 
 .mobile-sections {

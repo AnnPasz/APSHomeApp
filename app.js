@@ -19,6 +19,7 @@ const DEFAULT_SYNC_SETTINGS = {
 const DEFAULT_CATEGORY_ID = "cat-inne";
 const DEFAULT_TASK_CATEGORY_ID = "task-cat-inne";
 const AVAILABLE_VIEWS = ["shopping", "tasks", "mobile", "settings"];
+const MOBILE_STANDALONE_HASHES = ["mobile-direct", "mobile-only"];
 const CATEGORY_COLOR_PALETTE = [
   "#6C63FF",
   "#3BAFDA",
@@ -152,7 +153,7 @@ const sidebarLastUpdate = document.getElementById("sidebar-last-update");
 const sidebarRefreshButton = document.getElementById("sidebar-refresh");
 const sidebarRefreshStatus = document.getElementById("sidebar-refresh-status");
 const mobileShoppingList = document.getElementById("mobile-shopping-list");
-const mobileTasksList = document.getElementById("mobile-tasks-list");
+const mobileDirectLink = document.getElementById("mobile-direct-link");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
@@ -267,12 +268,32 @@ function loadActiveView() {
   return AVAILABLE_VIEWS.includes(savedView) ? savedView : "shopping";
 }
 
+function getHashToken() {
+  return window.location.hash.replace("#", "").trim().toLowerCase();
+}
+
 function getViewFromHash() {
-  const hash = window.location.hash.replace("#", "").trim().toLowerCase();
-  return AVAILABLE_VIEWS.includes(hash) ? hash : null;
+  const hash = getHashToken();
+  if (AVAILABLE_VIEWS.includes(hash)) {
+    return hash;
+  }
+
+  if (MOBILE_STANDALONE_HASHES.includes(hash)) {
+    return "mobile";
+  }
+
+  return null;
+}
+
+function isStandaloneMobileMode() {
+  return MOBILE_STANDALONE_HASHES.includes(getHashToken()) && activeView === "mobile";
 }
 
 function syncHashWithActiveView() {
+  if (isStandaloneMobileMode()) {
+    return;
+  }
+
   const nextHash = `#${activeView}`;
   if (window.location.hash !== nextHash) {
     window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
@@ -554,6 +575,7 @@ function renderAll() {
   renderTaskCalendar();
   renderActiveView();
   renderSidebarUpdateInfo();
+  renderMobileDirectLink();
   handleTaskScheduleTypeChange();
   syncHashWithActiveView();
 }
@@ -587,6 +609,8 @@ function renderActiveView() {
   viewPanels.forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.viewPanel === activeView);
   });
+
+  document.body.classList.toggle("mobile-standalone", isStandaloneMobileMode());
 }
 
 function renderCategoryControls() {
@@ -987,7 +1011,16 @@ function renderShopping() {
 
 function renderMobileView() {
   renderMobileShoppingList();
-  renderMobileTasksList();
+}
+
+function renderMobileDirectLink() {
+  if (!mobileDirectLink) {
+    return;
+  }
+
+  const directUrl = `${window.location.origin}${window.location.pathname}${window.location.search}#mobile-direct`;
+  mobileDirectLink.href = directUrl;
+  mobileDirectLink.textContent = directUrl;
 }
 
 function renderMobileShoppingList() {
@@ -1020,47 +1053,6 @@ function renderMobileShoppingList() {
 
     row.append(top, meta, actions);
     mobileShoppingList.appendChild(row);
-  });
-}
-
-function renderMobileTasksList() {
-  mobileTasksList.innerHTML = "";
-  const tasks = [...state.tasks]
-    .sort((first, second) => new Date(first.nextDueAt || nowIso()) - new Date(second.nextDueAt || nowIso()));
-
-  if (!tasks.length) {
-    mobileTasksList.appendChild(emptyState("Brak zadań do wykonania."));
-    return;
-  }
-
-  tasks.slice(0, 20).forEach((task) => {
-    const row = document.createElement("article");
-    row.className = "mobile-row";
-
-    const top = document.createElement("div");
-    top.className = "mobile-row-title";
-    top.textContent = task.name;
-
-    const dueDate = new Date(task.nextDueAt);
-    const dueDays = daysUntil(dueDate);
-    const scheduleLabel = task.scheduleType === "date"
-      ? `Na dzień: ${formatDate(dueDate)}`
-      : `Co ${task.intervalDays} dni • Termin: ${formatDate(dueDate)}`;
-
-    const meta = document.createElement("div");
-    meta.className = "mobile-row-meta";
-    meta.textContent = `${getTaskCategoryName(task.categoryId)} • ${scheduleLabel}`;
-
-    const badge = document.createElement("span");
-    badge.className = `badge ${getDueBadgeClass(dueDays)}`;
-    badge.textContent = getDueLabel(dueDays);
-
-    const actions = document.createElement("div");
-    actions.className = "actions";
-    actions.appendChild(button("Wykonane", "btn btn-success", () => completeTask(task.id)));
-
-    row.append(top, meta, badge, actions);
-    mobileTasksList.appendChild(row);
   });
 }
 
