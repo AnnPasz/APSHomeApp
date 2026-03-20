@@ -1,6 +1,15 @@
 const STORAGE_KEYS = {
   items: "aps-home-items-v1",
   tasks: "aps-home-maintenance-v1",
+  syncSettings: "aps-home-sync-settings-v1",
+};
+
+const DEFAULT_SYNC_SETTINGS = {
+  owner: "AnnPasz",
+  repo: "APSHomeApp",
+  branch: "main",
+  path: "data/state.json",
+  token: "",
 };
 
 const defaultItems = [
@@ -42,6 +51,8 @@ let state = {
   tasks: loadData(STORAGE_KEYS.tasks, defaultTasks),
 };
 
+let syncSettings = loadObjectData(STORAGE_KEYS.syncSettings, DEFAULT_SYNC_SETTINGS);
+
 let editingItemId = null;
 let editingTaskId = null;
 let draggedItemId = null;
@@ -49,9 +60,23 @@ let draggedItemId = null;
 const stockList = document.getElementById("stock-list");
 const shoppingList = document.getElementById("shopping-list");
 const maintenanceList = document.getElementById("maintenance-list");
+const syncForm = document.getElementById("sync-form");
+const syncOwnerInput = document.getElementById("sync-owner");
+const syncRepoInput = document.getElementById("sync-repo");
+const syncBranchInput = document.getElementById("sync-branch");
+const syncPathInput = document.getElementById("sync-path");
+const syncTokenInput = document.getElementById("sync-token");
+const syncDownloadButton = document.getElementById("sync-download");
+const syncUploadButton = document.getElementById("sync-upload");
+const syncStatus = document.getElementById("sync-status");
 
 document.getElementById("item-form").addEventListener("submit", handleAddItem);
 document.getElementById("task-form").addEventListener("submit", handleAddTask);
+syncForm.addEventListener("submit", handleSaveSyncSettings);
+syncDownloadButton.addEventListener("click", downloadFromGitHub);
+syncUploadButton.addEventListener("click", uploadToGitHub);
+
+setSyncFormValues(syncSettings);
 
 renderAll();
 
@@ -69,9 +94,33 @@ function loadData(key, fallback) {
   }
 }
 
+function loadObjectData(key, fallback) {
+  const raw = localStorage.getItem(key);
+  if (!raw) {
+    return { ...fallback };
+  }
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return { ...fallback };
+    }
+    return {
+      ...fallback,
+      ...parsed,
+    };
+  } catch {
+    return { ...fallback };
+  }
+}
+
 function saveData() {
   localStorage.setItem(STORAGE_KEYS.items, JSON.stringify(state.items));
   localStorage.setItem(STORAGE_KEYS.tasks, JSON.stringify(state.tasks));
+}
+
+function saveSyncSettings() {
+  localStorage.setItem(STORAGE_KEYS.syncSettings, JSON.stringify(syncSettings));
 }
 
 function addDays(date, days) {
@@ -547,4 +596,218 @@ function formatDate(date) {
     month: "short",
     day: "numeric",
   }).format(date);
+}
+
+function setSyncFormValues(settings) {
+  syncOwnerInput.value = settings.owner || "";
+  syncRepoInput.value = settings.repo || "";
+  syncBranchInput.value = settings.branch || "main";
+  syncPathInput.value = settings.path || "data/state.json";
+  syncTokenInput.value = settings.token || "";
+}
+
+function handleSaveSyncSettings(event) {
+  event.preventDefault();
+  syncSettings = readSyncSettingsFromForm();
+  saveSyncSettings();
+  setSyncStatus("Sync settings saved locally.", "success");
+}
+
+function readSyncSettingsFromForm() {
+  return {
+    owner: syncOwnerInput.value.trim(),
+    repo: syncRepoInput.value.trim(),
+    branch: syncBranchInput.value.trim() || "main",
+    path: syncPathInput.value.trim() || "data/state.json",
+    token: syncTokenInput.value.trim(),
+  };
+}
+
+function validateSyncSettings(requireToken) {
+  const latest = readSyncSettingsFromForm();
+  if (!latest.owner || !latest.repo || !latest.branch || !latest.path) {
+    throw new Error("Please fill owner, repo, branch, and data path.");
+  }
+  if (requireToken && !latest.token) {
+    throw new Error("A GitHub token is required for upload.");
+  }
+  syncSettings = latest;
+  saveSyncSettings();
+  return latest;
+}
+
+function setSyncStatus(message, type = "info") {
+  syncStatus.textContent = message;
+  syncStatus.classList.remove("sync-info", "sync-success", "sync-error");
+  syncStatus.classList.add(`sync-${type}`);
+}
+
+function setSyncBusy(isBusy) {
+  syncDownloadButton.disabled = isBusy;
+  syncUploadButton.disabled = isBusy;
+  syncForm.querySelectorAll("input, button").forEach((node) => {
+    if (node.id === "sync-download" || node.id === "sync-upload") {
+      return;
+    }
+    node.disabled = isBusy;
+  });
+}
+
+function buildContentsEndpoint(settings) {
+  const encodedPath = settings.path
+    .split("/")
+    .map((part) => encodeURIComponent(part))
+    .join("/");
+  const base = `https://api.github.com/repos/${encodeURIComponent(settings.owner)}/${encodeURIComponent(settings.repo)}/contents/${encodedPath}`;
+  const query = `?ref=${encodeURIComponent(settings.branch)}`;
+  return `${base}${query}`;
+}
+
+function getAuthHeaders(token) {
+  if (!token) {
+    return {
+      Accept: "application/vnd.github+json",
+    };
+  }
+
+  return {
+    Accept: "application/vnd.github+json",
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+function toBase64(value) {
+  return btoa(unescape(encodeURIComponent(value)));
+}
+
+function fromBase64(base64Value) {
+  return decodeURIComponent(escape(atob(base64Value)));
+}
+
+function exportSyncPayload() {
+  return {
+    version: 1,
+    updatedAt: nowIso(),
+    state: {
+      items: state.items,
+      tasks: state.tasks,
+    },
+  };
+}
+
+function applySyncPayload(payload) {
+  if (!payload || typeof payload !== "object") {
+    throw new Error("Remote data format is invalid.");
+  }
+
+  const remoteState = payload.state || payload;
+  if (!remoteState || typeof remoteState !== "object") {
+    throw new Error("Remote state is missing.");
+  }
+
+  const nextItems = Array.isArray(remoteState.items) ? remoteState.items : null;
+  const nextTasks = Array.isArray(remoteState.tasks) ? remoteState.tasks : null;
+
+  if (!nextItems || !nextTasks) {
+    throw new Error("Remote state must contain items and tasks arrays.");
+  }
+
+  state = {
+    items: nextItems,
+    tasks: nextTasks,
+  };
+
+  editingItemId = null;
+  editingTaskId = null;
+  persistAndRender();
+}
+
+async function downloadFromGitHub() {
+  try {
+    setSyncBusy(true);
+    setSyncStatus("Downloading data from GitHub...", "info");
+    const settings = validateSyncSettings(false);
+    const endpoint = buildContentsEndpoint(settings);
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: getAuthHeaders(settings.token),
+    });
+
+    if (response.status === 404) {
+      throw new Error("Remote data file not found. Upload first to create it.");
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`GitHub download failed (${response.status}): ${errorText.slice(0, 160)}`);
+    }
+
+    const payload = await response.json();
+    if (!payload.content) {
+      throw new Error("GitHub response did not include file content.");
+    }
+
+    const decoded = fromBase64(payload.content.replace(/\n/g, ""));
+    const parsed = JSON.parse(decoded);
+    applySyncPayload(parsed);
+    setSyncStatus("Download complete. Local data was updated from GitHub.", "success");
+  } catch (error) {
+    setSyncStatus(error.message || "Download failed.", "error");
+  } finally {
+    setSyncBusy(false);
+  }
+}
+
+async function uploadToGitHub() {
+  try {
+    setSyncBusy(true);
+    setSyncStatus("Uploading data to GitHub...", "info");
+    const settings = validateSyncSettings(true);
+    const endpoint = buildContentsEndpoint(settings);
+    const headers = getAuthHeaders(settings.token);
+
+    let currentSha = null;
+    const existing = await fetch(endpoint, {
+      method: "GET",
+      headers,
+    });
+
+    if (existing.ok) {
+      const existingJson = await existing.json();
+      currentSha = existingJson.sha || null;
+    } else if (existing.status !== 404) {
+      const errText = await existing.text();
+      throw new Error(`Cannot check existing file (${existing.status}): ${errText.slice(0, 160)}`);
+    }
+
+    const body = {
+      message: `Sync app state ${new Date().toISOString()}`,
+      content: toBase64(JSON.stringify(exportSyncPayload(), null, 2)),
+      branch: settings.branch,
+    };
+
+    if (currentSha) {
+      body.sha = currentSha;
+    }
+
+    const pushResponse = await fetch(endpoint, {
+      method: "PUT",
+      headers: {
+        ...headers,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!pushResponse.ok) {
+      const errorText = await pushResponse.text();
+      throw new Error(`GitHub upload failed (${pushResponse.status}): ${errorText.slice(0, 160)}`);
+    }
+
+    setSyncStatus("Upload complete. GitHub data file is updated.", "success");
+  } catch (error) {
+    setSyncStatus(error.message || "Upload failed.", "error");
+  } finally {
+    setSyncBusy(false);
+  }
 }

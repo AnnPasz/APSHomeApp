@@ -22,6 +22,9 @@ Simple web app for managing home consumables and preventive maintenance.
   - Queue auto-sorts by nearest due date.
   - Mark task done to reschedule based on interval.
 - Persistent data in browser `localStorage`.
+- GitHub sync:
+  - Upload current app data to a JSON file in your GitHub repo.
+  - Download app data from that JSON file to any device/browser.
 
 ## Run locally
 
@@ -33,6 +36,33 @@ python3 -m http.server 8000
 ```
 
 Then open `http://localhost:8000`.
+
+## Sync local and online versions
+
+Use the **GitHub Sync** panel in the app.
+
+Suggested settings for your repo:
+
+- Owner: `AnnPasz`
+- Repo: `APSHomeApp`
+- Branch: `main`
+- Data path: `data/state.json`
+
+### Upload to GitHub
+
+1. Create a GitHub token with repository **Contents write** access.
+2. Paste token in the sync panel.
+3. Click `Upload to GitHub`.
+
+### Download from GitHub
+
+1. Fill owner/repo/branch/path.
+2. Click `Download from GitHub`.
+3. Local data will be replaced with remote synced data.
+
+For public repositories, download can work without token, but upload always requires a token.
+
+Security note: token is saved in browser `localStorage` for convenience. Use a fine-grained token scoped only to this repository.
 
 ## Publish on GitHub Pages
 

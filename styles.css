@@ -162,6 +162,46 @@ body {
   font-size: 0.9rem;
 }
 
+.sync-form {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.sync-form input {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 0.6rem 0.7rem;
+  font-size: 0.92rem;
+}
+
+.sync-status {
+  margin-top: 0.7rem;
+  font-size: 0.88rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  color: var(--muted);
+  background: #f9fafb;
+}
+
+.sync-info {
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+
+.sync-success {
+  color: #166534;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.sync-error {
+  color: #b91c1c;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
 .btn {
   font-size: 0.82rem;
   border-radius: 7px;

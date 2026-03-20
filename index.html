@@ -51,6 +51,28 @@
 
         <div id="maintenance-list" class="card-list"></div>
       </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>GitHub Sync</h2>
+          <p>Sync items and maintenance data between local and GitHub Pages versions.</p>
+        </div>
+
+        <form id="sync-form" class="sync-form" autocomplete="off">
+          <input id="sync-owner" type="text" placeholder="Owner (e.g. AnnPasz)" required />
+          <input id="sync-repo" type="text" placeholder="Repo (e.g. APSHomeApp)" required />
+          <input id="sync-branch" type="text" placeholder="Branch (e.g. main)" required />
+          <input id="sync-path" type="text" placeholder="Data path (e.g. data/state.json)" required />
+          <input id="sync-token" type="password" placeholder="GitHub token (required for upload)" />
+          <div class="actions">
+            <button id="sync-save-settings" type="submit" class="btn">Save Sync Settings</button>
+            <button id="sync-download" type="button" class="btn btn-success">Download from GitHub</button>
+            <button id="sync-upload" type="button" class="btn btn-warning">Upload to GitHub</button>
+          </div>
+        </form>
+
+        <div id="sync-status" class="sync-status">Sync not started.</div>
+      </section>
     </main>
 
     <template id="empty-state-template">
