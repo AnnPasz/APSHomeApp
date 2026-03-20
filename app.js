@@ -665,11 +665,15 @@ function itemCard(item, column) {
   const meta = document.createElement("div");
   meta.className = "meta";
   const categoryName = getCategoryName(item.categoryId);
+  let shoppingStatusBadge = null;
   if (column === "stock") {
     meta.textContent = `Kategoria: ${categoryName}`;
   } else {
-    const level = item.depletionLevel === "gone" ? "brak" : "kończy się";
-    meta.textContent = `Kategoria: ${categoryName} • Status: ${level}`;
+    const level = item.depletionLevel === "gone" ? "Brak" : "Kończy się";
+    meta.textContent = `Kategoria: ${categoryName}`;
+    shoppingStatusBadge = document.createElement("span");
+    shoppingStatusBadge.className = `badge shopping-status ${item.depletionLevel === "gone" ? "shopping-status-gone" : "shopping-status-low"}`;
+    shoppingStatusBadge.textContent = level;
   }
 
   const actions = document.createElement("div");
@@ -686,7 +690,11 @@ function itemCard(item, column) {
     actions.appendChild(button("Edytuj", "btn", () => startEditItem(item.id)));
   }
 
-  card.append(title, meta, actions);
+  if (shoppingStatusBadge) {
+    card.append(title, meta, shoppingStatusBadge, actions);
+  } else {
+    card.append(title, meta, actions);
+  }
   return card;
 }
 

@@ -429,6 +429,22 @@ select:focus {
   background: #effcf8;
 }
 
+.shopping-status {
+  margin-right: 0.4rem;
+}
+
+.shopping-status-low {
+  border-color: #f8d488;
+  color: #9f5b02;
+  background: #fff7e6;
+}
+
+.shopping-status-gone {
+  border-color: #f3a2b8;
+  color: #ba2f5a;
+  background: #fff0f4;
+}
+
 .sync-status {
   margin-top: 0.75rem;
   font-size: 0.88rem;
