@@ -326,6 +326,20 @@ select:focus {
   gap: 0.9rem;
 }
 
+.task-date-filter {
+  border: 1px solid #d7ddff;
+  background: #f2f5ff;
+  color: #3b4789;
+  border-radius: 12px;
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.86rem;
+}
+
 .calendar-panel {
   border: 1px solid #e5e8fb;
   border-radius: 16px;
@@ -377,6 +391,7 @@ select:focus {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
 }
 
 .calendar-day.is-empty {
@@ -388,6 +403,11 @@ select:focus {
 .calendar-day.is-today {
   border-color: #b9c1ff;
   background: #f2f4ff;
+}
+
+.calendar-day.is-selected {
+  border-color: #7f8cff;
+  box-shadow: 0 0 0 2px rgba(127, 140, 255, 0.25);
 }
 
 .calendar-day.has-task {

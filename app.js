@@ -105,6 +105,7 @@ let editingItemId = null;
 let editingTaskId = null;
 let draggedItemId = null;
 let calendarMonthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let selectedCalendarDate = null;
 
 const filters = {
   categoryId: "all",
@@ -144,6 +145,7 @@ const calendarNextButton = document.getElementById("calendar-next");
 const calendarTodayButton = document.getElementById("calendar-today");
 const calendarMonthLabel = document.getElementById("calendar-month-label");
 const taskCalendarGrid = document.getElementById("task-calendar-grid");
+const taskDateFilter = document.getElementById("task-date-filter");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
@@ -1209,14 +1211,47 @@ function moveItemToState(itemId, targetState) {
 
 function renderMaintenance() {
   maintenanceList.innerHTML = "";
-  if (!state.tasks.length) {
+  const tasksToDisplay = selectedCalendarDate
+    ? state.tasks.filter((task) => getTaskDueDateKey(task) === selectedCalendarDate)
+    : state.tasks;
+
+  renderTaskDateFilterInfo(tasksToDisplay.length);
+
+  if (!tasksToDisplay.length) {
+    if (selectedCalendarDate) {
+      maintenanceList.appendChild(emptyState("Brak czynności zaplanowanych na wybrany dzień."));
+      return;
+    }
     maintenanceList.appendChild(emptyState("Brak zadań prewencyjnych."));
     return;
   }
 
-  [...state.tasks]
+  [...tasksToDisplay]
     .sort((first, second) => new Date(first.nextDueAt || nowIso()) - new Date(second.nextDueAt || nowIso()))
     .forEach((task) => maintenanceList.appendChild(taskCard(task)));
+}
+
+function renderTaskDateFilterInfo(count) {
+  if (!selectedCalendarDate) {
+    taskDateFilter.classList.add("is-hidden");
+    taskDateFilter.innerHTML = "";
+    return;
+  }
+
+  const selectedDate = new Date(`${selectedCalendarDate}T12:00:00`);
+  const formattedDate = formatDate(selectedDate);
+  taskDateFilter.classList.remove("is-hidden");
+  taskDateFilter.innerHTML = `
+    <span>Filtr daty: <strong>${formattedDate}</strong> • ${count} zadań</span>
+    <button id="clear-task-date-filter" type="button" class="btn">Wyczyść</button>
+  `;
+
+  const clearButton = document.getElementById("clear-task-date-filter");
+  clearButton.addEventListener("click", () => {
+    selectedCalendarDate = null;
+    renderMaintenance();
+    renderTaskCalendar();
+  });
 }
 
 function taskCard(task) {
@@ -1526,8 +1561,16 @@ function renderTaskCalendar() {
 
     const dayCell = document.createElement("div");
     dayCell.className = "calendar-day";
+    dayCell.addEventListener("click", () => {
+      selectedCalendarDate = selectedCalendarDate === dateKey ? null : dateKey;
+      renderMaintenance();
+      renderTaskCalendar();
+    });
     if (dateKey === todayKey) {
       dayCell.classList.add("is-today");
+    }
+    if (selectedCalendarDate === dateKey) {
+      dayCell.classList.add("is-selected");
     }
 
     const dayLabel = document.createElement("span");
