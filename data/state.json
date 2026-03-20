@@ -1,255 +1,304 @@
 {
-  "version": 1,
-  "updatedAt": "2026-03-20T10:53:46.101Z",
+  "version": 2,
+  "updatedAt": "2026-03-20T12:44:02.240Z",
   "state": {
+    "categories": [
+      {
+        "id": "cat-spozywcze",
+        "name": "Spożywcze"
+      },
+      {
+        "id": "cat-chemia",
+        "name": "Chemia domowa"
+      },
+      {
+        "id": "cat-inne",
+        "name": "Inne"
+      },
+      {
+        "id": "cat-c4604ca7-f612-4aa7-b5ca-61661663e1d0",
+        "name": "Warzywa i Owoce"
+      },
+      {
+        "id": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
+        "name": "Kot"
+      }
+    ],
     "items": [
       {
-        "id": "0198a471-3f05-48c4-acd6-a1e029a84cdd",
-        "name": "Drożdże",
-        "note": "",
+        "id": "80671ed4-6dd5-484a-9b3b-95ccfddbff49",
+        "name": "Mąka",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "3a2affc6-cfc6-482c-b12c-81d2b547e6af",
-        "name": "Mąka do pizzy",
-        "note": "",
+        "id": "b361a279-5413-4b94-b567-a516ed988c9d",
+        "name": "Makaron",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "c47b5420-e431-45e7-bd41-37378cd4683a",
-        "name": "Pasata",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
+        "id": "bd161f80-a2e5-43d3-a02e-2b02deda7bef",
+        "name": "Cebula",
+        "categoryId": "cat-c4604ca7-f612-4aa7-b5ca-61661663e1d0",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:08.353Z",
         "purchasedAt": null
       },
       {
-        "id": "df29791a-6b18-49bb-9bfd-f94ba4cab927",
-        "name": "Parmezan",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "f39ed01d-a722-491d-b5cb-e88b510b05be",
-        "name": "Oliwa",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "81432566-809d-4a79-8baf-271f4a188124",
-        "name": "Czosnek",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "3bd826eb-89c5-43e3-92e4-03c6dd3624c5",
-        "name": "Kapsułki do zmywarki",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "d2754d5f-925b-421a-98bf-2242cb3a75b4",
+        "id": "f0f4787e-72ac-45bd-aabc-738d43d03169",
         "name": "Kapsułki do prania kolor",
-        "note": "",
+        "categoryId": "cat-chemia",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:17.734Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "094a6e03-315a-4da8-9612-1a22f00074b0",
+        "name": "Kapsułki do zmywarki",
+        "categoryId": "cat-chemia",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:18.822Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "3425897b-9a29-46c0-96bd-d671dfcf2e57",
+        "name": "Mleko owsiane",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:33.117Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "e81a9b89-38cf-439b-acb7-f1a5478fda43",
+        "name": "Parmezan",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "32dcd2bb-eb9b-48bc-a55a-7fbd2257a268",
-        "name": "Kapsułki do prania białe",
-        "note": "",
+        "id": "24b1441a-8342-41e5-9e49-82d886d7b040",
+        "name": "Mleko normalne",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:31.601Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "44aecebe-7e89-45cf-8f20-0ea714c0f0e7",
+        "name": "Czosnek",
+        "categoryId": "cat-c4604ca7-f612-4aa7-b5ca-61661663e1d0",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:10.666Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "5771b315-b345-4ac7-abef-dd117f2f98f4",
+        "name": "Ręczniki papierow",
+        "categoryId": "cat-inne",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "267f2a01-1eb0-4a46-bb85-d0bfc6038797",
-        "name": "płyn do płukania",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "dbe12be4-4e5c-476c-a143-ada5d95dad4f",
-        "name": "Domestos",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "f782ca77-bc65-4797-aa52-5e64c0ac5e8e",
-        "name": "Kret",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "2195428a-c43a-4051-9e50-26bb810f09fc",
-        "name": "Pasta do zebów",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "f15d03e3-9690-438f-b5ec-3f6e7e52bfa9",
-        "name": "Puszki Ata",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "bf72c1b4-3ba8-4817-9e20-b015d3e409e0",
-        "name": "Suche Ata",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "538f695d-8e43-4ab3-bedd-6dde7b764d7c",
-        "name": "Żwirek",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "0d2e0520-543c-4200-8237-70ea008eac16",
+        "id": "14827d9c-b7a6-4caa-915f-ce292d1a44b8",
         "name": "Mokre chusteczki do powierzchni",
-        "note": "",
+        "categoryId": "cat-inne",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:34.166Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "916a18b5-30a0-4d43-9204-cc7c5e44e949",
+        "name": "Papier toaletowy",
+        "categoryId": "cat-inne",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "65742d5c-24d3-43cc-8c3f-601447f21630",
-        "name": "Papier do pieczenia",
-        "note": "",
+        "id": "6416b69c-db2c-45b0-b51c-07709784d8f3",
+        "name": "Mokry papier toaletowy",
+        "categoryId": "cat-inne",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "3ae9c0b3-a40b-46f1-b777-01eca6dd0099",
-        "name": "Ręczniki Papierowe",
-        "note": "",
+        "id": "8f76e56f-e969-4f3c-9ba1-1983601c64af",
+        "name": "Domestos",
+        "categoryId": "cat-chemia",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:12.670Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "84d3ffa6-d2a0-48ce-a395-6a48c9e03ec6",
+        "name": "Kret",
+        "categoryId": "cat-chemia",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:20.139Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "849805cf-7720-4222-a31d-b26b2a895b76",
+        "name": "Kapsułki do prania białe",
+        "categoryId": "cat-chemia",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "d28e58f4-8e26-4dbc-8b35-823a7aca659d",
-        "name": "Chusteczki",
-        "note": "",
+        "id": "fa7f78fd-170d-40fa-94c8-659aa64ae79e",
+        "name": "Płyn do płukania",
+        "categoryId": "cat-chemia",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "f43e6654-a6b4-4314-a846-e1f29d8008aa",
-        "name": "Folia spożywcza",
-        "note": "",
+        "id": "1ec58eb9-3056-4868-8e35-1872c352a118",
+        "name": "Kulki do kibla",
+        "categoryId": "cat-chemia",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "22b3b6b6-01d2-4f3a-9a66-05cfe2b69f95",
-        "name": "Cukier trzcinowy",
-        "note": "",
+        "id": "eb466055-233a-418c-9147-0deb19c449e5",
+        "name": "Mąka do pizzy",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "e1e343fe-4e15-4b0b-b6b5-6988fdf1a347",
-        "name": "Mleko Osiane",
-        "note": "",
+        "id": "517f3fa6-48e4-403a-9cf5-dfd8618a30eb",
+        "name": "Drożdże",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:14.117Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "ed5242ba-2d3d-4a50-be23-9643455c0dea",
+        "name": "Pasata",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:42.252Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "ba6a2a47-cc85-4de0-a1e6-cfb156085975",
+        "name": "Mozarella",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:37.381Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "8a7cf6f3-7e6d-402a-83a1-d14a0868f20a",
+        "name": "Pepperoni",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:43.050Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "cb4a0156-07ba-4da9-91cf-45277a858527",
+        "name": "Oliwa",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "33f6d83b-2a76-47a6-b449-aa52d79eea67",
-        "name": "Mleko",
-        "note": "",
+        "id": "c810ec05-aec6-4c47-bc04-290b4de79fd6",
+        "name": "Sos sojowy",
+        "categoryId": "cat-spozywcze",
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T12:40:55.271Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "be320517-cdc7-4aac-9404-cb1163a02e41",
+        "name": "żwirek",
+        "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
+        "state": "shopping",
+        "depletionLevel": "gone",
+        "movedToShoppingAt": "2026-03-20T12:40:57.565Z",
+        "purchasedAt": null
+      },
+      {
+        "id": "fa7fe294-ebf8-4e80-bd29-7adc0bfcb1ae",
+        "name": "Puszki",
+        "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": "2026-03-20T12:40:50.015Z"
+      },
+      {
+        "id": "c4cb4da6-2958-402c-a52e-27f626839e3f",
+        "name": "Suche papu",
+        "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "c3eaffc9-5006-4015-8547-645e88d2181e",
-        "name": "Jajka",
-        "note": "",
+        "id": "400530a8-db33-4d62-ac88-fd1ea1882013",
+        "name": "Liofilizowane chrupi",
+        "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "fea0e5f6-3d81-4376-8345-365ba188ab66",
-        "name": "Majo",
-        "note": "",
+        "id": "3b4c94ec-ba13-4ecf-b36b-97f761f35ead",
+        "name": "Churru",
+        "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
       },
       {
-        "id": "d0b3441f-5206-49b1-96b7-a4d44c9dcf32",
-        "name": "Keczup",
-        "note": "",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
-        "purchasedAt": null
-      },
-      {
-        "id": "1e3c4b02-a87a-4a79-9c6d-a1357c267fd9",
-        "name": "Masło",
-        "note": "",
+        "id": "1eaa06f4-47b7-4251-a65f-5bf8a94a9ad6",
+        "name": "Filtry brita",
+        "categoryId": "cat-chemia",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
@@ -259,21 +308,21 @@
     "tasks": [
       {
         "id": "787e11e3-1141-4ed7-9d2e-2c8843694d2a",
-        "name": "Wash the shower",
+        "name": "Umyć prysznic",
         "intervalDays": 14,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
         "nextDueAt": "2026-04-03T09:36:08.055Z"
       },
       {
         "id": "13840bd9-9745-4e52-ba76-1ba24308ecdc",
-        "name": "Wash the fridge",
+        "name": "Umyć lodówkę",
         "intervalDays": 90,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
         "nextDueAt": "2026-06-18T09:36:08.055Z"
       },
       {
         "id": "28b8ac97-77de-4f3d-9c2c-fafc34b18333",
-        "name": "Wash the windows",
+        "name": "Umyć okna",
         "intervalDays": 45,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
         "nextDueAt": "2026-05-04T09:36:08.055Z"
@@ -301,7 +350,7 @@
       },
       {
         "id": "45fd6d2f-e08f-43f6-8e21-3a173da8f0ec",
-        "name": "Odkurzyć meble",
+        "name": "Odkurzyć tapicerkę",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:40:47.715Z",
         "nextDueAt": "2026-03-27T10:40:47.715Z"
@@ -315,10 +364,17 @@
       },
       {
         "id": "57ff1393-51ac-40de-b8cb-40aa86552a2f",
-        "name": "Odkurzyć filtr",
+        "name": "Odkurzyć filtr w suszarce",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:41:15.751Z",
         "nextDueAt": "2026-03-27T10:41:15.751Z"
+      },
+      {
+        "id": "f2d35776-0d30-4f76-9ac8-cda277a67096",
+        "name": "Umyć zbiornik na wodę w oczyszczaczu",
+        "intervalDays": 30,
+        "lastDoneAt": "2026-03-20T12:41:30.923Z",
+        "nextDueAt": "2026-04-19T11:41:30.923Z"
       }
     ]
   }
