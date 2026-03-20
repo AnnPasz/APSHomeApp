@@ -18,7 +18,7 @@ const DEFAULT_SYNC_SETTINGS = {
 
 const DEFAULT_CATEGORY_ID = "cat-inne";
 const DEFAULT_TASK_CATEGORY_ID = "task-cat-inne";
-const AVAILABLE_VIEWS = ["shopping", "tasks", "settings"];
+const AVAILABLE_VIEWS = ["shopping", "tasks", "mobile", "settings"];
 const CATEGORY_COLOR_PALETTE = [
   "#6C63FF",
   "#3BAFDA",
@@ -151,6 +151,8 @@ const taskDateFilter = document.getElementById("task-date-filter");
 const sidebarLastUpdate = document.getElementById("sidebar-last-update");
 const sidebarRefreshButton = document.getElementById("sidebar-refresh");
 const sidebarRefreshStatus = document.getElementById("sidebar-refresh-status");
+const mobileShoppingList = document.getElementById("mobile-shopping-list");
+const mobileTasksList = document.getElementById("mobile-tasks-list");
 const navLinks = [...document.querySelectorAll(".nav-link")];
 const viewPanels = [...document.querySelectorAll("[data-view-panel]")];
 
@@ -198,6 +200,7 @@ syncUploadButton.addEventListener("click", uploadToGitHub);
 navLinks.forEach((link) => {
   link.addEventListener("click", () => setActiveView(link.dataset.view));
 });
+window.addEventListener("hashchange", handleHashViewChange);
 
 setSyncFormValues(syncSettings);
 renderAll();
@@ -255,21 +258,49 @@ function saveLastGithubDownloadAt(value) {
 }
 
 function loadActiveView() {
+  const hashView = getViewFromHash();
+  if (hashView) {
+    return hashView;
+  }
+
   const savedView = localStorage.getItem(STORAGE_KEYS.activeView);
   return AVAILABLE_VIEWS.includes(savedView) ? savedView : "shopping";
+}
+
+function getViewFromHash() {
+  const hash = window.location.hash.replace("#", "").trim().toLowerCase();
+  return AVAILABLE_VIEWS.includes(hash) ? hash : null;
+}
+
+function syncHashWithActiveView() {
+  const nextHash = `#${activeView}`;
+  if (window.location.hash !== nextHash) {
+    window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}${nextHash}`);
+  }
+}
+
+function handleHashViewChange() {
+  const hashView = getViewFromHash();
+  if (hashView && hashView !== activeView) {
+    setActiveView(hashView, { skipHashSync: true });
+  }
 }
 
 function saveActiveView() {
   localStorage.setItem(STORAGE_KEYS.activeView, activeView);
 }
 
-function setActiveView(viewName) {
+function setActiveView(viewName, options = {}) {
+  const { skipHashSync = false } = options;
   if (!AVAILABLE_VIEWS.includes(viewName)) {
     return;
   }
   activeView = viewName;
   saveActiveView();
   renderActiveView();
+  if (!skipHashSync) {
+    syncHashWithActiveView();
+  }
 }
 
 function normalizeCategories(categories) {
@@ -519,10 +550,12 @@ function renderAll() {
   renderTaskCategoryControls();
   renderShopping();
   renderMaintenance();
+  renderMobileView();
   renderTaskCalendar();
   renderActiveView();
   renderSidebarUpdateInfo();
   handleTaskScheduleTypeChange();
+  syncHashWithActiveView();
 }
 
 function renderSidebarUpdateInfo() {
@@ -950,6 +983,85 @@ function renderShopping() {
       shoppingList.appendChild(shoppingCategoryGroup(group));
     });
   }
+}
+
+function renderMobileView() {
+  renderMobileShoppingList();
+  renderMobileTasksList();
+}
+
+function renderMobileShoppingList() {
+  mobileShoppingList.innerHTML = "";
+  const shoppingItems = state.items
+    .filter((item) => item.state === "shopping")
+    .sort((first, second) => first.name.localeCompare(second.name, "pl"));
+
+  if (!shoppingItems.length) {
+    mobileShoppingList.appendChild(emptyState("Brak produktów na liście zakupów."));
+    return;
+  }
+
+  shoppingItems.slice(0, 20).forEach((item) => {
+    const row = document.createElement("article");
+    row.className = "mobile-row";
+
+    const top = document.createElement("div");
+    top.className = "mobile-row-title";
+    top.textContent = item.name;
+
+    const meta = document.createElement("div");
+    meta.className = "mobile-row-meta";
+    meta.textContent = `${getCategoryName(item.categoryId)} • ${shoppingStatusText(item)}`;
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    actions.appendChild(button("Kupione", "btn btn-success", () => confirmPurchased(item.id)));
+    actions.appendChild(button("Wróć", "btn", () => returnToStock(item.id)));
+
+    row.append(top, meta, actions);
+    mobileShoppingList.appendChild(row);
+  });
+}
+
+function renderMobileTasksList() {
+  mobileTasksList.innerHTML = "";
+  const tasks = [...state.tasks]
+    .sort((first, second) => new Date(first.nextDueAt || nowIso()) - new Date(second.nextDueAt || nowIso()));
+
+  if (!tasks.length) {
+    mobileTasksList.appendChild(emptyState("Brak zadań do wykonania."));
+    return;
+  }
+
+  tasks.slice(0, 20).forEach((task) => {
+    const row = document.createElement("article");
+    row.className = "mobile-row";
+
+    const top = document.createElement("div");
+    top.className = "mobile-row-title";
+    top.textContent = task.name;
+
+    const dueDate = new Date(task.nextDueAt);
+    const dueDays = daysUntil(dueDate);
+    const scheduleLabel = task.scheduleType === "date"
+      ? `Na dzień: ${formatDate(dueDate)}`
+      : `Co ${task.intervalDays} dni • Termin: ${formatDate(dueDate)}`;
+
+    const meta = document.createElement("div");
+    meta.className = "mobile-row-meta";
+    meta.textContent = `${getTaskCategoryName(task.categoryId)} • ${scheduleLabel}`;
+
+    const badge = document.createElement("span");
+    badge.className = `badge ${getDueBadgeClass(dueDays)}`;
+    badge.textContent = getDueLabel(dueDays);
+
+    const actions = document.createElement("div");
+    actions.className = "actions";
+    actions.appendChild(button("Wykonane", "btn btn-success", () => completeTask(task.id)));
+
+    row.append(top, meta, badge, actions);
+    mobileTasksList.appendChild(row);
+  });
 }
 
 function groupShoppingItemsByCategory(items) {

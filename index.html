@@ -17,6 +17,7 @@
         <nav class="sidebar-nav" aria-label="Główne menu">
           <button class="nav-link is-active" type="button" data-view="shopping">Zakupy Kanban</button>
           <button class="nav-link" type="button" data-view="tasks">Czynności domowe</button>
+          <button class="nav-link" type="button" data-view="mobile">Mobile</button>
           <button class="nav-link" type="button" data-view="settings">Ustawienia</button>
         </nav>
 
@@ -112,6 +113,32 @@
                   </div>
                   <div id="task-calendar-grid" class="task-calendar-grid"></div>
                 </aside>
+              </div>
+            </section>
+          </section>
+
+          <section id="view-mobile" class="view-panel" data-view-panel="mobile">
+            <section class="panel mobile-panel">
+              <div class="panel-header">
+                <h2>Mobile</h2>
+                <p>Uproszczony widok telefonu z najważniejszymi akcjami pod ręką.</p>
+              </div>
+
+              <div class="mobile-link-box">
+                <span>Osobny link do tej podstrony:</span>
+                <code>#mobile</code>
+              </div>
+
+              <div class="mobile-sections">
+                <section class="mobile-card">
+                  <h3>Lista zakupów</h3>
+                  <div id="mobile-shopping-list" class="mobile-list"></div>
+                </section>
+
+                <section class="mobile-card">
+                  <h3>Najbliższe czynności</h3>
+                  <div id="mobile-tasks-list" class="mobile-list"></div>
+                </section>
               </div>
             </section>
           </section>

@@ -389,6 +389,74 @@ select:focus {
   min-width: 0;
 }
 
+.mobile-panel {
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.mobile-link-box {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  border: 1px dashed #d7dcfb;
+  border-radius: 12px;
+  padding: 0.45rem 0.62rem;
+  background: #f7f8ff;
+  color: #4a527f;
+  margin-bottom: 0.85rem;
+  font-size: 0.86rem;
+}
+
+.mobile-link-box code {
+  background: #ffffff;
+  border: 1px solid #dce1fb;
+  border-radius: 8px;
+  padding: 0.12rem 0.36rem;
+  font-weight: 700;
+  color: #4d48d8;
+}
+
+.mobile-sections {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.mobile-card {
+  border: 1px solid #e5e8fb;
+  border-radius: 16px;
+  background: #fcfcff;
+  padding: 0.72rem;
+}
+
+.mobile-card h3 {
+  margin: 0 0 0.6rem;
+  color: #434b75;
+}
+
+.mobile-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.mobile-row {
+  border: 1px solid #e1e5fc;
+  border-radius: 14px;
+  padding: 0.65rem;
+  background: #fff;
+}
+
+.mobile-row-title {
+  font-weight: 700;
+  margin-bottom: 0.26rem;
+  font-size: 1rem;
+}
+
+.mobile-row-meta {
+  color: var(--muted);
+  font-size: 0.86rem;
+  margin-bottom: 0.45rem;
+}
+
 .task-date-filter {
   border: 1px solid #d7ddff;
   background: #f2f5ff;
@@ -736,6 +804,10 @@ select:focus {
   .tasks-layout {
     grid-template-columns: 1fr;
   }
+
+  .mobile-panel {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 840px) {
@@ -759,5 +831,11 @@ select:focus {
   .kanban-grid,
   .settings-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mobile-row .actions .btn {
+    flex: 1 1 auto;
+    min-height: 2.2rem;
+    font-size: 0.9rem;
   }
 }
