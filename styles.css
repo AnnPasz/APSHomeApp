@@ -1,17 +1,17 @@
 :root {
-  --bg: #f4f2ff;
-  --bg2: #ecf9ff;
+  --bg: #f6f0fb;
+  --bg2: #e9f4ff;
   --panel: #ffffff;
-  --text: #1f2544;
-  --muted: #6d7394;
-  --line: #e8eaf7;
-  --primary: #5a55ea;
+  --text: #1b2346;
+  --muted: #6f7698;
+  --line: #e9e6f8;
+  --primary: #1d3fa8;
   --success: #089981;
   --success-soft: #e8fbf4;
-  --warning: #d28a1a;
-  --warning-soft: #fff8ea;
-  --danger: #e45476;
-  --danger-soft: #ffeef2;
+  --warning: #d06a9c;
+  --warning-soft: #fff1f8;
+  --danger: #d84783;
+  --danger-soft: #ffeaf3;
   --shadow: 0 14px 35px rgba(72, 72, 116, 0.12);
 }
 
@@ -41,7 +41,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 1.4rem 1rem;
-  background: linear-gradient(180deg, #312f8d, #5c56ec 58%, #716bff);
+  background: linear-gradient(180deg, #0f234f, #1d3c85 52%, #e16aa0);
   color: #fff;
   box-shadow: 10px 0 40px rgba(50, 47, 141, 0.22);
 }
@@ -70,7 +70,7 @@ body {
 
 .sidebar-logo:hover {
   transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 14px 30px rgba(23, 19, 89, 0.35), 0 0 0 4px rgba(197, 208, 255, 0.16);
+  box-shadow: 0 14px 30px rgba(12, 35, 79, 0.4), 0 0 0 4px rgba(246, 164, 203, 0.22);
 }
 
 .sidebar-brand h1 {
@@ -154,10 +154,10 @@ body {
 }
 
 .nav-link.is-active {
-  background: #ffffff;
-  color: var(--primary);
+  background: #ffdcec;
+  color: #1b2f6b;
   border-color: transparent;
-  box-shadow: 0 10px 24px rgba(24, 20, 91, 0.18);
+  box-shadow: 0 10px 24px rgba(225, 106, 160, 0.32);
 }
 
 .content-area {
@@ -197,7 +197,7 @@ body {
 }
 
 .panel {
-  background: linear-gradient(160deg, #ffffff, #fbfbff 66%);
+  background: linear-gradient(160deg, #ffffff, #fff7fc 66%);
   border: 1px solid var(--line);
   border-radius: 20px;
   padding: 1rem;
@@ -350,8 +350,8 @@ select {
 
 input:focus,
 select:focus {
-  outline: 2px solid #c7c5ff;
-  border-color: #b8b6ff;
+  outline: 2px solid #f3b5d2;
+  border-color: #eca8c8;
 }
 
 .submenu {
@@ -481,9 +481,9 @@ select:focus {
 }
 
 .task-date-filter {
-  border: 1px solid #d7ddff;
-  background: #f2f5ff;
-  color: #3b4789;
+  border: 1px solid #f0bfd8;
+  background: #fff3f9;
+  color: #93386a;
   border-radius: 12px;
   padding: 0.5rem 0.6rem;
   margin-bottom: 0.7rem;
@@ -555,17 +555,17 @@ select:focus {
 }
 
 .calendar-day.is-today {
-  border-color: #b9c1ff;
-  background: #f2f4ff;
+  border-color: #9db9ff;
+  background: #edf3ff;
 }
 
 .calendar-day.is-selected {
-  border-color: #7f8cff;
-  box-shadow: 0 0 0 2px rgba(127, 140, 255, 0.25);
+  border-color: #de6fa7;
+  box-shadow: 0 0 0 2px rgba(222, 111, 167, 0.28);
 }
 
 .calendar-day.has-task {
-  box-shadow: 0 4px 12px rgba(90, 85, 234, 0.12);
+  box-shadow: 0 4px 12px rgba(225, 106, 160, 0.2);
 }
 
 .calendar-day-number {
@@ -703,7 +703,7 @@ select:focus {
 }
 
 .btn:hover {
-  background: #f3f4ff;
+  background: #fff0f7;
 }
 
 .inline-form button[type="submit"] {
@@ -754,15 +754,15 @@ select:focus {
 }
 
 .badge-overdue {
-  border-color: #ffc3d1;
-  color: #c23a64;
-  background: #fff0f4;
+  border-color: #ffb8d8;
+  color: #bf2f69;
+  background: #fff0f8;
 }
 
 .badge-soon {
-  border-color: #ffe4ad;
-  color: #ad6b14;
-  background: #fff8eb;
+  border-color: #ffd6ea;
+  color: #9e3f70;
+  background: #fff4fa;
 }
 
 .badge-ok {
