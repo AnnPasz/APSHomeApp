@@ -264,6 +264,48 @@ select:focus {
   gap: 0.55rem;
 }
 
+.shopping-group {
+  border: 1px solid #e6e9fb;
+  border-radius: 12px;
+  padding: 0.5rem;
+  background: #fcfcff;
+}
+
+.shopping-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: #454d77;
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px dashed #dfe3fb;
+}
+
+.shopping-group-dot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 37, 68, 0.2);
+}
+
+.shopping-group-count {
+  margin-left: auto;
+  min-width: 1.3rem;
+  text-align: center;
+  font-size: 0.72rem;
+  border: 1px solid #d9def9;
+  border-radius: 999px;
+  padding: 0.12rem 0.35rem;
+  background: #f2f4ff;
+}
+
+.shopping-group-items {
+  display: grid;
+  gap: 0.5rem;
+}
+
 .card {
   border: 1px solid #e4e7fc;
   border-radius: 14px;

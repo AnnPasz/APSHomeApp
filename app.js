@@ -567,10 +567,71 @@ function renderShopping() {
   if (!shoppingItems.length) {
     shoppingList.appendChild(emptyState("Lista zakupów jest pusta."));
   } else {
-    shoppingItems
-      .sort((first, second) => new Date(first.movedToShoppingAt || nowIso()) - new Date(second.movedToShoppingAt || nowIso()))
-      .forEach((item) => shoppingList.appendChild(itemCard(item, "shopping")));
+    const grouped = groupShoppingItemsByCategory(shoppingItems);
+    grouped.forEach((group) => {
+      shoppingList.appendChild(shoppingCategoryGroup(group));
+    });
   }
+}
+
+function groupShoppingItemsByCategory(items) {
+  const groupsMap = new Map();
+
+  items.forEach((item) => {
+    const categoryId = item.categoryId || DEFAULT_CATEGORY_ID;
+    if (!groupsMap.has(categoryId)) {
+      groupsMap.set(categoryId, []);
+    }
+    groupsMap.get(categoryId).push(item);
+  });
+
+  return [...groupsMap.entries()]
+    .map(([categoryId, groupedItems]) => {
+      const categoryName = getCategoryName(categoryId);
+      const categoryColor = getCategoryColor(categoryId);
+      const orderedItems = [...groupedItems].sort(
+        (first, second) => new Date(first.movedToShoppingAt || nowIso()) - new Date(second.movedToShoppingAt || nowIso())
+      );
+
+      return {
+        categoryId,
+        categoryName,
+        categoryColor,
+        items: orderedItems,
+      };
+    })
+    .sort((first, second) => first.categoryName.localeCompare(second.categoryName, "pl"));
+}
+
+function shoppingCategoryGroup(group) {
+  const section = document.createElement("section");
+  section.className = "shopping-group";
+
+  const header = document.createElement("header");
+  header.className = "shopping-group-header";
+
+  const colorDot = document.createElement("span");
+  colorDot.className = "shopping-group-dot";
+  colorDot.style.backgroundColor = group.categoryColor;
+
+  const title = document.createElement("span");
+  title.textContent = group.categoryName;
+
+  const count = document.createElement("span");
+  count.className = "shopping-group-count";
+  count.textContent = `${group.items.length}`;
+
+  header.append(colorDot, title, count);
+  section.appendChild(header);
+
+  const content = document.createElement("div");
+  content.className = "shopping-group-items";
+  group.items.forEach((item) => {
+    content.appendChild(itemCard(item, "shopping"));
+  });
+
+  section.appendChild(content);
+  return section;
 }
 
 function itemCard(item, column) {
