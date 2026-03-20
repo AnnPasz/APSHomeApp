@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Control Board</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Home Control Board</h1>
+      <p>Track consumables and preventive home maintenance in one place.</p>
+    </header>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Shopping Kanban</h2>
+          <p>Mark items as low/gone and confirm when purchased.</p>
+        </div>
+
+        <form id="item-form" class="inline-form">
+          <input id="item-name" type="text" placeholder="Add consumable (e.g. pasta)" required />
+          <input id="item-note" type="text" placeholder="Optional note (e.g. 500g)" />
+          <button type="submit">Add Item</button>
+        </form>
+
+        <div class="kanban-grid">
+          <div class="column">
+            <h3>At Home</h3>
+            <div id="stock-list" class="card-list"></div>
+          </div>
+          <div class="column">
+            <h3>Shopping List</h3>
+            <div id="shopping-list" class="card-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Preventive Maintenance Queue</h2>
+          <p>Tasks reorder automatically by next due date.</p>
+        </div>
+
+        <form id="task-form" class="inline-form">
+          <input id="task-name" type="text" placeholder="Add maintenance task" required />
+          <input id="task-interval" type="number" min="1" placeholder="Interval (days)" required />
+          <button type="submit">Add Task</button>
+        </form>
+
+        <div id="maintenance-list" class="card-list"></div>
+      </section>
+    </main>
+
+    <template id="empty-state-template">
+      <div class="empty-state">Nothing here yet.</div>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

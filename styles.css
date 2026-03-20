@@ -1,0 +1,231 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7fb;
+  --panel: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --primary: #2563eb;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #dc2626;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.app-header {
+  padding: 2rem 1rem 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.app-header p {
+  margin-top: 0.4rem;
+  color: var(--muted);
+}
+
+.layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.05);
+}
+
+.panel-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.panel-header p {
+  margin: 0.25rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.inline-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.inline-form input,
+.inline-form button {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 0.65rem 0.75rem;
+  font-size: 0.95rem;
+}
+
+.inline-form button {
+  background: var(--primary);
+  color: #fff;
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.kanban-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.column {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fbfcff;
+  padding: 0.6rem;
+}
+
+.column h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  color: #374151;
+}
+
+.card-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.65rem;
+  background: #fff;
+}
+
+.draggable-card {
+  cursor: grab;
+}
+
+.draggable-card.is-dragging {
+  opacity: 0.5;
+}
+
+.drop-active {
+  outline: 2px dashed #93c5fd;
+  outline-offset: 2px;
+  background: #eff6ff;
+}
+
+.card-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.meta {
+  font-size: 0.84rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.edit-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.edit-form input {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.65rem;
+  font-size: 0.9rem;
+}
+
+.btn {
+  font-size: 0.82rem;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+  background: #fff;
+}
+
+.btn-warning {
+  border-color: #f59e0b;
+  color: var(--warning);
+}
+
+.btn-danger {
+  border-color: #ef4444;
+  color: var(--danger);
+}
+
+.btn-success {
+  border-color: #10b981;
+  color: var(--success);
+}
+
+.empty-state {
+  padding: 0.75rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+}
+
+.badge {
+  display: inline-block;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid var(--line);
+}
+
+.badge-overdue {
+  border-color: #fecaca;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.badge-soon {
+  border-color: #fde68a;
+  color: #92400e;
+  background: #fffbeb;
+}
+
+.badge-ok {
+  border-color: #bbf7d0;
+  color: #166534;
+  background: #f0fdf4;
+}
+
+@media (max-width: 720px) {
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+
+  .kanban-grid {
+    grid-template-columns: 1fr;
+  }
+}
