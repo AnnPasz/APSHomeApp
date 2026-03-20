@@ -27,6 +27,10 @@ W sekcji `Ustawienia` znajdują się:
 - Filtrowanie listy produktów:
   - filtr po kategorii
   - dynamiczne wyszukiwanie po nazwie
+  - przycisk `Wyczyść filtry`
+- Kolory kategorii:
+  - każda nowa kategoria dostaje automatycznie inny kolor
+  - kafelki produktów w `Zakupy Kanban` są kolorowane wg kategorii
 - Zadania prewencyjne:
   - własna częstotliwość w dniach
   - automatyczne sortowanie wg terminu

@@ -16,12 +16,26 @@ const DEFAULT_SYNC_SETTINGS = {
 
 const DEFAULT_CATEGORY_ID = "cat-inne";
 const AVAILABLE_VIEWS = ["shopping", "tasks", "settings"];
+const CATEGORY_COLOR_PALETTE = [
+  "#6C63FF",
+  "#3BAFDA",
+  "#37C48E",
+  "#F6A623",
+  "#E66A8D",
+  "#8D6E63",
+  "#26C6DA",
+  "#7E57C2",
+  "#EF5350",
+  "#66BB6A",
+  "#42A5F5",
+  "#AB47BC",
+];
 
 const defaultCategories = [
-  { id: "cat-spozywcze", name: "Spożywcze" },
-  { id: "cat-chemia", name: "Chemia domowa" },
-  { id: "cat-lazienka", name: "Łazienka" },
-  { id: DEFAULT_CATEGORY_ID, name: "Inne" },
+  { id: "cat-spozywcze", name: "Spożywcze", color: "#6C63FF" },
+  { id: "cat-chemia", name: "Chemia domowa", color: "#3BAFDA" },
+  { id: "cat-lazienka", name: "Łazienka", color: "#37C48E" },
+  { id: DEFAULT_CATEGORY_ID, name: "Inne", color: "#F6A623" },
 ];
 
 const nowIso = () => new Date().toISOString();
@@ -83,6 +97,7 @@ const maintenanceList = document.getElementById("maintenance-list");
 const itemCategorySelect = document.getElementById("item-category");
 const categoryFilterSelect = document.getElementById("category-filter");
 const itemSearchInput = document.getElementById("item-search");
+const clearFiltersButton = document.getElementById("clear-filters");
 const categoryForm = document.getElementById("category-form");
 const categoryNameInput = document.getElementById("category-name");
 const categoryList = document.getElementById("category-list");
@@ -109,6 +124,7 @@ itemSearchInput.addEventListener("input", (event) => {
   filters.searchText = event.target.value.trim().toLowerCase();
   renderShopping();
 });
+clearFiltersButton.addEventListener("click", clearShoppingFilters);
 syncForm.addEventListener("submit", handleSaveSyncSettings);
 syncDownloadButton.addEventListener("click", downloadFromGitHub);
 syncUploadButton.addEventListener("click", uploadToGitHub);
@@ -183,6 +199,7 @@ function normalizeCategories(categories) {
     .map((category) => ({
       id: category.id || `cat-${crypto.randomUUID()}`,
       name: category.name.trim(),
+      color: normalizeColor(category.color),
     }))
     .filter((category) => category.name.length > 0);
 
@@ -196,7 +213,85 @@ function normalizeCategories(categories) {
       uniqueById.set(category.id, category);
     }
   });
-  return [...uniqueById.values()];
+
+  const withUniqueColors = [];
+  const usedColors = new Set();
+
+  [...uniqueById.values()].forEach((category) => {
+    const preferredColor = category.color;
+    const color = preferredColor && !usedColors.has(preferredColor)
+      ? preferredColor
+      : pickNextCategoryColor(usedColors);
+    usedColors.add(color);
+    withUniqueColors.push({
+      ...category,
+      color,
+    });
+  });
+
+  return withUniqueColors;
+}
+
+function normalizeColor(color) {
+  if (typeof color !== "string") {
+    return null;
+  }
+  const normalized = color.trim().toUpperCase();
+  return /^#[0-9A-F]{6}$/.test(normalized) ? normalized : null;
+}
+
+function pickNextCategoryColor(usedColors) {
+  const paletteColor = CATEGORY_COLOR_PALETTE.find((color) => !usedColors.has(color));
+  if (paletteColor) {
+    return paletteColor;
+  }
+
+  let hue = (usedColors.size * 47) % 360;
+  let candidate = hslToHex(hue, 68, 62);
+  while (usedColors.has(candidate)) {
+    hue = (hue + 23) % 360;
+    candidate = hslToHex(hue, 68, 62);
+  }
+  return candidate;
+}
+
+function hslToHex(hue, saturation, lightness) {
+  const sat = saturation / 100;
+  const light = lightness / 100;
+  const chroma = (1 - Math.abs(2 * light - 1)) * sat;
+  const x = chroma * (1 - Math.abs((hue / 60) % 2 - 1));
+  const m = light - chroma / 2;
+
+  let red = 0;
+  let green = 0;
+  let blue = 0;
+
+  if (hue < 60) {
+    red = chroma;
+    green = x;
+  } else if (hue < 120) {
+    red = x;
+    green = chroma;
+  } else if (hue < 180) {
+    green = chroma;
+    blue = x;
+  } else if (hue < 240) {
+    green = x;
+    blue = chroma;
+  } else if (hue < 300) {
+    red = x;
+    blue = chroma;
+  } else {
+    red = chroma;
+    blue = x;
+  }
+
+  const toHex = (value) => {
+    const channel = Math.round((value + m) * 255);
+    return channel.toString(16).padStart(2, "0");
+  };
+
+  return `#${toHex(red)}${toHex(green)}${toHex(blue)}`.toUpperCase();
 }
 
 function normalizeItems(items) {
@@ -328,6 +423,12 @@ function renderCategoryList() {
 
     const label = document.createElement("span");
     label.textContent = `${category.name} (${usageCount})`;
+    label.className = "chip-label";
+
+    const colorDot = document.createElement("span");
+    colorDot.className = "chip-color-dot";
+    colorDot.style.backgroundColor = category.color;
+    chip.appendChild(colorDot);
     chip.appendChild(label);
 
     if (category.id !== DEFAULT_CATEGORY_ID) {
@@ -363,9 +464,22 @@ function handleAddCategory(event) {
     return;
   }
 
-  state.categories.push({ id: `cat-${crypto.randomUUID()}`, name });
+  const usedColors = new Set(state.categories.map((category) => category.color));
+  state.categories.push({
+    id: `cat-${crypto.randomUUID()}`,
+    name,
+    color: pickNextCategoryColor(usedColors),
+  });
   categoryNameInput.value = "";
   persistAndRender();
+}
+
+function clearShoppingFilters() {
+  filters.categoryId = "all";
+  filters.searchText = "";
+  categoryFilterSelect.value = "all";
+  itemSearchInput.value = "";
+  renderShopping();
 }
 
 function removeCategory(categoryId) {
@@ -463,6 +577,8 @@ function itemCard(item, column) {
   const card = document.createElement("article");
   card.className = "card draggable-card";
   card.draggable = true;
+  const categoryColor = getCategoryColor(item.categoryId);
+  applyCategoryCardColor(card, categoryColor);
 
   card.addEventListener("dragstart", (event) => {
     draggedItemId = item.id;
@@ -515,6 +631,24 @@ function itemCard(item, column) {
 
 function getCategoryName(categoryId) {
   return state.categories.find((category) => category.id === categoryId)?.name || "Inne";
+}
+
+function getCategoryColor(categoryId) {
+  return state.categories.find((category) => category.id === categoryId)?.color || "#6C63FF";
+}
+
+function applyCategoryCardColor(cardElement, categoryColor) {
+  cardElement.style.borderColor = hexToRgba(categoryColor, 0.55);
+  cardElement.style.background = `linear-gradient(150deg, ${hexToRgba(categoryColor, 0.14)}, #FFFFFF 42%)`;
+  cardElement.style.boxShadow = `0 6px 18px ${hexToRgba(categoryColor, 0.18)}`;
+}
+
+function hexToRgba(hexColor, alpha) {
+  const cleaned = normalizeColor(hexColor) || "#6C63FF";
+  const red = Number.parseInt(cleaned.slice(1, 3), 16);
+  const green = Number.parseInt(cleaned.slice(3, 5), 16);
+  const blue = Number.parseInt(cleaned.slice(5, 7), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
 }
 
 function startEditItem(itemId) {
