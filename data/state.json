@@ -1,0 +1,325 @@
+{
+  "version": 1,
+  "updatedAt": "2026-03-20T10:53:46.101Z",
+  "state": {
+    "items": [
+      {
+        "id": "0198a471-3f05-48c4-acd6-a1e029a84cdd",
+        "name": "Drożdże",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "3a2affc6-cfc6-482c-b12c-81d2b547e6af",
+        "name": "Mąka do pizzy",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "c47b5420-e431-45e7-bd41-37378cd4683a",
+        "name": "Pasata",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "df29791a-6b18-49bb-9bfd-f94ba4cab927",
+        "name": "Parmezan",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "f39ed01d-a722-491d-b5cb-e88b510b05be",
+        "name": "Oliwa",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "81432566-809d-4a79-8baf-271f4a188124",
+        "name": "Czosnek",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "3bd826eb-89c5-43e3-92e4-03c6dd3624c5",
+        "name": "Kapsułki do zmywarki",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "d2754d5f-925b-421a-98bf-2242cb3a75b4",
+        "name": "Kapsułki do prania kolor",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "32dcd2bb-eb9b-48bc-a55a-7fbd2257a268",
+        "name": "Kapsułki do prania białe",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "267f2a01-1eb0-4a46-bb85-d0bfc6038797",
+        "name": "płyn do płukania",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "dbe12be4-4e5c-476c-a143-ada5d95dad4f",
+        "name": "Domestos",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "f782ca77-bc65-4797-aa52-5e64c0ac5e8e",
+        "name": "Kret",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "2195428a-c43a-4051-9e50-26bb810f09fc",
+        "name": "Pasta do zebów",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "f15d03e3-9690-438f-b5ec-3f6e7e52bfa9",
+        "name": "Puszki Ata",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "bf72c1b4-3ba8-4817-9e20-b015d3e409e0",
+        "name": "Suche Ata",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "538f695d-8e43-4ab3-bedd-6dde7b764d7c",
+        "name": "Żwirek",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "0d2e0520-543c-4200-8237-70ea008eac16",
+        "name": "Mokre chusteczki do powierzchni",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "65742d5c-24d3-43cc-8c3f-601447f21630",
+        "name": "Papier do pieczenia",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "3ae9c0b3-a40b-46f1-b777-01eca6dd0099",
+        "name": "Ręczniki Papierowe",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "d28e58f4-8e26-4dbc-8b35-823a7aca659d",
+        "name": "Chusteczki",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "f43e6654-a6b4-4314-a846-e1f29d8008aa",
+        "name": "Folia spożywcza",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "22b3b6b6-01d2-4f3a-9a66-05cfe2b69f95",
+        "name": "Cukier trzcinowy",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "e1e343fe-4e15-4b0b-b6b5-6988fdf1a347",
+        "name": "Mleko Osiane",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "33f6d83b-2a76-47a6-b449-aa52d79eea67",
+        "name": "Mleko",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "c3eaffc9-5006-4015-8547-645e88d2181e",
+        "name": "Jajka",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "fea0e5f6-3d81-4376-8345-365ba188ab66",
+        "name": "Majo",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "d0b3441f-5206-49b1-96b7-a4d44c9dcf32",
+        "name": "Keczup",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "1e3c4b02-a87a-4a79-9c6d-a1357c267fd9",
+        "name": "Masło",
+        "note": "",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      }
+    ],
+    "tasks": [
+      {
+        "id": "787e11e3-1141-4ed7-9d2e-2c8843694d2a",
+        "name": "Wash the shower",
+        "intervalDays": 14,
+        "lastDoneAt": "2026-03-20T10:36:08.055Z",
+        "nextDueAt": "2026-04-03T09:36:08.055Z"
+      },
+      {
+        "id": "13840bd9-9745-4e52-ba76-1ba24308ecdc",
+        "name": "Wash the fridge",
+        "intervalDays": 90,
+        "lastDoneAt": "2026-03-20T10:36:08.055Z",
+        "nextDueAt": "2026-06-18T09:36:08.055Z"
+      },
+      {
+        "id": "28b8ac97-77de-4f3d-9c2c-fafc34b18333",
+        "name": "Wash the windows",
+        "intervalDays": 45,
+        "lastDoneAt": "2026-03-20T10:36:08.055Z",
+        "nextDueAt": "2026-05-04T09:36:08.055Z"
+      },
+      {
+        "id": "ed777e29-7616-48a2-ba96-3af436c1d8cb",
+        "name": "Umyć podłogi",
+        "intervalDays": 7,
+        "lastDoneAt": "2026-03-20T10:41:19.408Z",
+        "nextDueAt": "2026-03-27T10:41:19.408Z"
+      },
+      {
+        "id": "2414e783-fe49-473a-8767-e7282d1790d1",
+        "name": "Odkurzanie",
+        "intervalDays": 1,
+        "lastDoneAt": "2026-03-20T10:40:26.451Z",
+        "nextDueAt": "2026-03-21T10:40:26.451Z"
+      },
+      {
+        "id": "e8e2a8d6-1145-41d3-89b6-68200501347e",
+        "name": "Kurze z mebli",
+        "intervalDays": 7,
+        "lastDoneAt": "2026-03-20T10:40:37.984Z",
+        "nextDueAt": "2026-03-27T10:40:37.984Z"
+      },
+      {
+        "id": "45fd6d2f-e08f-43f6-8e21-3a173da8f0ec",
+        "name": "Odkurzyć meble",
+        "intervalDays": 7,
+        "lastDoneAt": "2026-03-20T10:40:47.715Z",
+        "nextDueAt": "2026-03-27T10:40:47.715Z"
+      },
+      {
+        "id": "41378831-ba95-4ed6-841a-dc85a209b555",
+        "name": "Umyć fontannę",
+        "intervalDays": 7,
+        "lastDoneAt": "2026-03-20T10:40:55.682Z",
+        "nextDueAt": "2026-03-27T10:40:55.682Z"
+      },
+      {
+        "id": "57ff1393-51ac-40de-b8cb-40aa86552a2f",
+        "name": "Odkurzyć filtr",
+        "intervalDays": 7,
+        "lastDoneAt": "2026-03-20T10:41:15.751Z",
+        "nextDueAt": "2026-03-27T10:41:15.751Z"
+      }
+    ]
+  }
+}
