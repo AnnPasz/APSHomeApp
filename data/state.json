@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-03-20T13:47:50.679Z",
+  "updatedAt": "2026-03-20T14:42:32.215Z",
   "state": {
     "categories": [
       {
@@ -295,9 +295,9 @@
         "id": "fa7fe294-ebf8-4e80-bd29-7adc0bfcb1ae",
         "name": "Puszki",
         "categoryId": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
-        "state": "stock",
-        "depletionLevel": null,
-        "movedToShoppingAt": null,
+        "state": "shopping",
+        "depletionLevel": "low",
+        "movedToShoppingAt": "2026-03-20T14:09:07.916Z",
         "purchasedAt": "2026-03-20T12:40:50.015Z"
       },
       {
@@ -316,7 +316,7 @@
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
-        "purchasedAt": null
+        "purchasedAt": "2026-03-20T14:03:09.271Z"
       },
       {
         "id": "3b4c94ec-ba13-4ecf-b36b-97f761f35ead",
@@ -325,7 +325,7 @@
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
-        "purchasedAt": null
+        "purchasedAt": "2026-03-20T14:03:10.200Z"
       },
       {
         "id": "1eaa06f4-47b7-4251-a65f-5bf8a94a9ad6",
