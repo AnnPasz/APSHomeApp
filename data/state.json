@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-03-20T12:53:50.495Z",
+  "updatedAt": "2026-03-20T13:10:23.131Z",
   "state": {
     "categories": [
       {
@@ -27,6 +27,33 @@
         "id": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
         "name": "Kot",
         "color": "#E66A8D"
+      }
+    ],
+    "taskCategories": [
+      {
+        "id": "task-cat-sprzatanie",
+        "name": "Sprzątanie",
+        "color": "#7E57C2"
+      },
+      {
+        "id": "task-cat-lazienka",
+        "name": "Łazienka",
+        "color": "#37C48E"
+      },
+      {
+        "id": "task-cat-inne",
+        "name": "Inne",
+        "color": "#F6A623"
+      },
+      {
+        "id": "task-cat-05628709-e10d-47a1-bdbc-d3708b7e7779",
+        "name": "Do umówienia / External",
+        "color": "#3BAFDA"
+      },
+      {
+        "id": "task-cat-8dc99038-8d3f-44e3-b398-4ad88a74ca4e",
+        "name": "Czyszczenie / wymiana",
+        "color": "#6C63FF"
       }
     ],
     "items": [
@@ -326,78 +353,117 @@
         "depletionLevel": null,
         "movedToShoppingAt": null,
         "purchasedAt": null
+      },
+      {
+        "id": "64aa4924-5d05-400c-9064-20249453da33",
+        "name": "Worki na śmieci 60 i 120",
+        "categoryId": "cat-chemia",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
       }
     ],
     "tasks": [
       {
         "id": "787e11e3-1141-4ed7-9d2e-2c8843694d2a",
         "name": "Umyć prysznic",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 14,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
-        "nextDueAt": "2026-04-03T09:36:08.055Z"
+        "nextDueAt": "2026-04-03T09:36:08.055Z",
+        "specificDate": null
       },
       {
         "id": "13840bd9-9745-4e52-ba76-1ba24308ecdc",
         "name": "Umyć lodówkę",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 90,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
-        "nextDueAt": "2026-06-18T09:36:08.055Z"
+        "nextDueAt": "2026-06-18T09:36:08.055Z",
+        "specificDate": null
       },
       {
         "id": "28b8ac97-77de-4f3d-9c2c-fafc34b18333",
         "name": "Umyć okna",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 45,
         "lastDoneAt": "2026-03-20T10:36:08.055Z",
-        "nextDueAt": "2026-05-04T09:36:08.055Z"
+        "nextDueAt": "2026-05-04T09:36:08.055Z",
+        "specificDate": null
       },
       {
         "id": "ed777e29-7616-48a2-ba96-3af436c1d8cb",
         "name": "Umyć podłogi",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:41:19.408Z",
-        "nextDueAt": "2026-03-27T10:41:19.408Z"
+        "nextDueAt": "2026-03-27T10:41:19.408Z",
+        "specificDate": null
       },
       {
         "id": "2414e783-fe49-473a-8767-e7282d1790d1",
         "name": "Odkurzanie",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 1,
         "lastDoneAt": "2026-03-20T10:40:26.451Z",
-        "nextDueAt": "2026-03-21T10:40:26.451Z"
+        "nextDueAt": "2026-03-21T10:40:26.451Z",
+        "specificDate": null
       },
       {
         "id": "e8e2a8d6-1145-41d3-89b6-68200501347e",
         "name": "Kurze z mebli",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:40:37.984Z",
-        "nextDueAt": "2026-03-27T10:40:37.984Z"
+        "nextDueAt": "2026-03-27T10:40:37.984Z",
+        "specificDate": null
       },
       {
         "id": "45fd6d2f-e08f-43f6-8e21-3a173da8f0ec",
         "name": "Odkurzyć tapicerkę",
+        "categoryId": "task-cat-sprzatanie",
+        "scheduleType": "interval",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:40:47.715Z",
-        "nextDueAt": "2026-03-27T10:40:47.715Z"
+        "nextDueAt": "2026-03-27T10:40:47.715Z",
+        "specificDate": null
       },
       {
         "id": "41378831-ba95-4ed6-841a-dc85a209b555",
         "name": "Umyć fontannę",
+        "categoryId": "task-cat-8dc99038-8d3f-44e3-b398-4ad88a74ca4e",
+        "scheduleType": "interval",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:40:55.682Z",
-        "nextDueAt": "2026-03-27T10:40:55.682Z"
+        "nextDueAt": "2026-03-27T10:40:55.682Z",
+        "specificDate": null
       },
       {
         "id": "57ff1393-51ac-40de-b8cb-40aa86552a2f",
         "name": "Odkurzyć filtr w suszarce",
+        "categoryId": "task-cat-8dc99038-8d3f-44e3-b398-4ad88a74ca4e",
+        "scheduleType": "interval",
         "intervalDays": 7,
         "lastDoneAt": "2026-03-20T10:41:15.751Z",
-        "nextDueAt": "2026-03-27T10:41:15.751Z"
+        "nextDueAt": "2026-03-27T10:41:15.751Z",
+        "specificDate": null
       },
       {
         "id": "f2d35776-0d30-4f76-9ac8-cda277a67096",
         "name": "Umyć zbiornik na wodę w oczyszczaczu",
+        "categoryId": "task-cat-8dc99038-8d3f-44e3-b398-4ad88a74ca4e",
+        "scheduleType": "interval",
         "intervalDays": 30,
         "lastDoneAt": "2026-03-20T12:41:30.923Z",
-        "nextDueAt": "2026-04-19T11:41:30.923Z"
+        "nextDueAt": "2026-04-19T11:41:30.923Z",
+        "specificDate": null
       }
     ]
   }
