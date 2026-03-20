@@ -163,7 +163,16 @@ body {
   display: grid;
   gap: 0.55rem;
   margin-bottom: 0.85rem;
-  grid-template-columns: 1.2fr 1fr 1fr 0.9fr auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.task-form-grid button[type="submit"] {
+  justify-self: start;
+}
+
+.task-form-grid input,
+.task-form-grid select {
+  min-width: 0;
 }
 
 .is-hidden {
@@ -324,6 +333,10 @@ select:focus {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(290px, 0.85fr);
   gap: 0.9rem;
+}
+
+.tasks-layout > div {
+  min-width: 0;
 }
 
 .task-date-filter {
