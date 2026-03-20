@@ -1,27 +1,32 @@
 {
   "version": 2,
-  "updatedAt": "2026-03-20T12:44:02.240Z",
+  "updatedAt": "2026-03-20T12:53:50.495Z",
   "state": {
     "categories": [
       {
         "id": "cat-spozywcze",
-        "name": "Spożywcze"
+        "name": "Spożywcze",
+        "color": "#6C63FF"
       },
       {
         "id": "cat-chemia",
-        "name": "Chemia domowa"
+        "name": "Chemia domowa",
+        "color": "#3BAFDA"
       },
       {
         "id": "cat-inne",
-        "name": "Inne"
+        "name": "Inne",
+        "color": "#37C48E"
       },
       {
         "id": "cat-c4604ca7-f612-4aa7-b5ca-61661663e1d0",
-        "name": "Warzywa i Owoce"
+        "name": "Warzywa i Owoce",
+        "color": "#F6A623"
       },
       {
         "id": "cat-e0a01bf1-e5a7-411e-8fb4-e24fb4aa3977",
-        "name": "Kot"
+        "name": "Kot",
+        "color": "#E66A8D"
       }
     ],
     "items": [
@@ -299,6 +304,24 @@
         "id": "1eaa06f4-47b7-4251-a65f-5bf8a94a9ad6",
         "name": "Filtry brita",
         "categoryId": "cat-chemia",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "2700a8bc-ffdf-4529-ba07-1171480e6f74",
+        "name": "Masło orzechowe",
+        "categoryId": "cat-spozywcze",
+        "state": "stock",
+        "depletionLevel": null,
+        "movedToShoppingAt": null,
+        "purchasedAt": null
+      },
+      {
+        "id": "67d69c73-aaf7-4116-975a-c6c5a965a4b7",
+        "name": "Granola",
+        "categoryId": "cat-spozywcze",
         "state": "stock",
         "depletionLevel": null,
         "movedToShoppingAt": null,
