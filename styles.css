@@ -50,6 +50,20 @@ body {
   padding: 0.6rem 0.55rem 1.4rem;
 }
 
+.sidebar-logo-wrap {
+  padding: 0.2rem 0.45rem 0.7rem;
+}
+
+.sidebar-logo {
+  display: block;
+  width: 100%;
+  max-width: 205px;
+  height: auto;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 10px 24px rgba(23, 19, 89, 0.28);
+}
+
 .sidebar-brand h1 {
   margin: 0;
   font-size: 1.5rem;
